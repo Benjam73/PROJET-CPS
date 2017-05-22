@@ -5,8 +5,8 @@
 #include <ctype.h>
 
 bool le = false;	// little endian
-bool rb = false;        // reverse binary
-bool da = false;        // decimal address
+bool rb = false;	// reverse binary
+bool da = false;	// decimal address
 
 FILE *input;
 char *filename = NULL;
