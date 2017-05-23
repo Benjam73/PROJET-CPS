@@ -157,3 +157,19 @@ dict_t dict_new(){
 
 	return dico ;
 }
+<<<<<<< HEAD
+=======
+
+
+dict_error_t dict_reinit(dict_t dico){
+
+	for(int i=256; i<TAILLE_MAX; i++){
+		free(dico->map[i]);
+		dico->map[i] = NULL;
+	}
+
+	return DICT_NOERROR;
+
+}
+
+>>>>>>> 00393f3528ca48df028e1176e868cce7230dfab0
