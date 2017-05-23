@@ -1,5 +1,6 @@
 #ifndef DICT_H
 #define DICT_H
+#include <stdint.h>
 
 typedef short int dict_index_t;  	// le type index
 typedef long dict_char_t;          // le type valeur/caractere
@@ -20,7 +21,7 @@ typedef enum {
   DICT_MALLOCERROR=8  // pour getstring
 }dict_error_t;
 
-// constantes dict_index_t 
+// constantes dict_index_t
 #define DICT_ROOT_INDEX	-1		// index de la racine
 #define DICT_NONODE -2			// Index de noeud illegal
 
@@ -38,7 +39,7 @@ struct _dict{
 };
 
 struct _node {
-  char sym ;          // Le char suffixe
+  uint8_t sym ;          // Le char suffixe
   dict_index_t code ; // Le code associe au symbole
   struct _node* frere ;   // Le noeud suivant dans la liste de meme niveau
   struct _node* fils ;    // Le noeud de profondeur superieure
@@ -53,13 +54,13 @@ dict_t dict_new();
 dict_error_t dict_reinit(dict_t dico);
 
 // Ajoute la chaine de caractere mot au dictionnaire dico
-dict_error_t dict_insert(dict_t dico, char* mot, int taille_mot) ;
+dict_error_t dict_insert(dict_t dico, uint8_t* mot, int taille_mot) ;
 
 // Renvoit dans resultat le codage correspondant a mot
-dict_error_t dict_rechercher_mot(dict_t dico, char* mot, int taille_mot, dict_index_t* resultat);
+dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict_index_t* resultat);
 
 // Renvoit dans resultat le mot correspondant au codage index
-dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, char* resultat);
+dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* resultat);
 
 
 
