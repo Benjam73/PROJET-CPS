@@ -9,7 +9,7 @@ CC=gcc-6
 # Liste des executables a creer
 EXEC=test_dict
 
-CFLAGS=-Iinclude/dictionnaire/ -Wall -g
+CFLAGS=-Iinclude/dictionnaire/ -Iinclude/ -Wall -g
 DFLAGS=-DFRANCAIS
 
 

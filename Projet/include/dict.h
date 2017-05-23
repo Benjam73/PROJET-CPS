@@ -57,7 +57,7 @@ dict_error_t dict_reinit(dict_t dico);
 dict_error_t dict_insert(dict_t dico, uint8_t* mot, int taille_mot) ;
 
 // Renvoit dans resultat le codage correspondant a mot
-dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict_index_t* resultat);
+dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict_index_t* resultat, int* taille);
 
 // Renvoit dans resultat le mot correspondant au codage index
 dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* resultat);
