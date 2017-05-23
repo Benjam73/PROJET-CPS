@@ -9,7 +9,7 @@ typedef struct _node *noeud_t;
 
 // Return codes
 typedef enum {
-  DICT_INFOOK=0,    // uniquement pour info et node_content
+  DICT_NOERROR=0,    // uniquement pour info et node_content
   DICT_NODICT=1,    // dictionnaire invalide
   DICT_INVALID=2,   // index ou prefixe invalide
   DICT_NOTFOUND=3,  // noeud cherche absent
@@ -28,18 +28,22 @@ typedef enum {
 #define DICT_CHAR_EOS	-1		// End of string (valeur de racine)
 #define DICT_CHAR_NOCHAR -2		// Valeur indefinie
 
-struct {
+// TAILLE_MAX = 2^15
+#define TAILLE_MAX 32768
+
+struct _dict{
   dict_index_t nb_elt ;
   noeud_t racine ;
-}_dict;
+  noeud_t map[TAILLE_MAX] ;
+};
 
-struct n {
+struct _node {
   char sym ;          // Le char suffixe
   dict_index_t code ; // Le code associe au symbole
-  struct n* frere ;   // Le noeud suivant dans la liste de meme niveau
-  struct n* fils ;    // Le noeud de profondeur superieure
-  struct n* pere ;    // Le noeud de profondeur inferieure
-}_node;
+  struct _node* frere ;   // Le noeud suivant dans la liste de meme niveau
+  struct _node* fils ;    // Le noeud de profondeur superieure
+  struct _node* pere ;    // Le noeud de profondeur inferieure
+};
 
 
 // Alloue et renvoie un dictionnaire compose des prefixes de taille 1
@@ -49,13 +53,13 @@ dict_t dict_new();
 dict_error_t dict_reinit(dict_t dico);
 
 // Ajoute la chaine de caractere mot au dictionnaire dico
-dict_error_t dict_insert(dict_t dico, char* mot) ;
+dict_error_t dict_insert(dict_t dico, char* mot, int taille_mot) ;
 
 // Renvoit dans resultat le codage correspondant a mot
-dict_error_t dict_rechercher_mot(dict_t dico, char* mot, dict_index_t resultat);
+dict_error_t dict_rechercher_mot(dict_t dico, char* mot, int taille_mot, dict_index_t* resultat);
 
 // Renvoit dans resultat le mot correspondant au codage index
-dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, char** resultat);
+dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, char* resultat);
 
 
 
