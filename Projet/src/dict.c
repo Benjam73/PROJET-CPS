@@ -32,8 +32,12 @@ dict_error_t dict_rechercher_mot(dict_t dico, char* mot, int taille_mot, dict_in
 dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, char* resultat){
         int i = 0;
         int j = 1;
-        for ( i = 0; i < dico->nb_elt || dico->map[i]->code == index; i++) {
+
+        for ( i = 0; i < dico->nb_elt || dico->map[i]->code != index; i++) {
+			//printf(" valeur de map[%d] : %d \n",i,dico->map[i]->code );
+
         }
+            //printf(" valeur de i : %d \n",i);
         if ( dico->map[i]->code == index) {
                 noeud_t noeud_courant = dico->map[i];
                 resultat[0] = noeud_courant->sym;
@@ -42,6 +46,7 @@ dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, char* result
                         resultat[j] = noeud_courant->sym;
                         j++;
                 }
+               
         }else{
                 return DICT_NOTFOUND;
         }
@@ -51,6 +56,8 @@ dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, char* result
                 resultat[k] = resultat[j-k];
                 resultat[j-k] = temp;
         }
+
+
         return DICT_NOERROR;
 }
 
@@ -84,11 +91,16 @@ dict_error_t ajouter_dans_ligne(dict_t dico, noeud_t pere, noeud_t frere, char s
 	frere->frere = courant ;
 
 	courant->sym = sym ;
-	courant->code = dico->nb_elt ;
+	courant->code = dico->nb_elt-1 ;
 	courant->fils = NULL ;
 	courant->frere = NULL ;
 	courant->pere = pere ;
-	dico->map[dico->nb_elt] = courant;
+
+	dico->map[dico->nb_elt-1] = courant;
+
+ 	printf("valeur de map[%d] = %d \n",dico->nb_elt-1,dico->map[dico->nb_elt-1]->code);
+	printf(" valeur de map de 0 : %d \n ",dico->map[0]->code);
+
 
 	return DICT_NOERROR ;
 }
@@ -100,9 +112,9 @@ dict_error_t dict_insert(dict_t dico, char* mot, int taille_mot){
 
 	noeud_t ligne_courante = dico->racine;
 	int index_caractere_courant = 0;
-	noeud_t noeud_courant ;
-	noeud_t noeud_pere ;
-	noeud_t noeud_frere = NULL;
+	noeud_t noeud_courant = malloc(sizeof(noeud_t));
+	noeud_t noeud_pere = malloc(sizeof(noeud_t));
+	noeud_t noeud_frere = malloc(sizeof(noeud_t));
 
 	if (dict_rechercher_mot(dico, mot, taille_mot, &index) == DICT_NOTFOUND){
 		while (index_caractere_courant < taille_mot){
@@ -130,7 +142,7 @@ void dict_print (dict_t dico){
 
 	for (int i = 0; i < dico->nb_elt; i++){
 		dict_rechercher_index(dico, i, mot_courant);
-		printf("Code : %d \t Mot courant : %s\n", i, mot_courant);
+		//printf("Code : %d \t Mot courant : %s\n", i, mot_courant);
 	}
 
 }
@@ -150,6 +162,7 @@ dict_t dict_new(){
 		mot_courant[0] = (char) i ;
 		dict_insert(dico, mot_courant, 1);
 	}
+	printf(" valeur de map de 0 : %d \n ",dico->map[0]->code);
 
 	// TODO : ajout cas speciaux
 	// EndOfMessage, ResetDictionnaire, AgrandirDictionnaire
@@ -157,8 +170,7 @@ dict_t dict_new(){
 
 	return dico ;
 }
-<<<<<<< HEAD
-=======
+
 
 
 dict_error_t dict_reinit(dict_t dico){
@@ -172,4 +184,3 @@ dict_error_t dict_reinit(dict_t dico){
 
 }
 
->>>>>>> 00393f3528ca48df028e1176e868cce7230dfab0
