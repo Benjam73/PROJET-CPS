@@ -4,10 +4,10 @@
 #include "dict.h"
 
 
-// Retourne le pointeur du noeud ayant c pour symbole et son frere precedent 
+// Retourne le pointeur du noeud ayant c pour symbole et son frere precedent
 // Les deux pointeurs vallent NULL si c n'est pas present
 noeud_t rechercher_dans_ligne(noeud_t liste, char c, noeud_t frere){
-	
+
 	noeud_t noeud_courant = liste;
 	frere = NULL;
 
@@ -19,12 +19,12 @@ noeud_t rechercher_dans_ligne(noeud_t liste, char c, noeud_t frere){
 		frere = noeud_courant;
 		noeud_courant = noeud_courant->frere;
 	}
-	
+
 	return NULL;
 }
 
 
-// Ajoute courant dans dico a la suite de frere avec sym comme symbole 
+// Ajoute courant dans dico a la suite de frere avec sym comme symbole
 dict_error_t ajouter_dans_ligne(dict_t dico, noeud_t pere, noeud_t frere, char sym){
 
 	noeud_t courant = malloc(sizeof(noeud_t)) ;
@@ -59,14 +59,14 @@ dict_error_t dict_insert(dict_t dico, char* mot, int taille_mot){
 			if (noeud_courant != NULL){
 				noeud_pere = noeud_courant;
 				index_caractere_courant++;
-			} 
+			}
 			else{
 				ajouter_dans_ligne(dico, noeud_pere, noeud_frere, mot[index_caractere_courant]);
 				return DICT_ADDED;
 			}
 
 			ligne_courante = noeud_courant->fils;
-		}	
+		}
 	}
 	return DICT_FOUND ;
 }
@@ -85,7 +85,7 @@ void dict_print (dict_t dico){
 
 
 dict_t dict_new(){
-	
+
 	dict_t dico = malloc(sizeof(dict_t)) ;
 
 	dico->nb_elt = 0 ;
@@ -99,9 +99,57 @@ dict_t dict_new(){
 		dict_insert(dico, mot_courant, 1);
 	}
 
-	// TODO : ajout cas speciaux 
+	// TODO : ajout cas speciaux
 	// EndOfMessage, ResetDictionnaire, AgrandirDictionnaire
-	
+
 
 	return dico ;
+}
+
+dict_error_t dict_rechercher_mot(dict_t dico, char* mot, int taille_mot, dict_index_t resultat){
+        noeud_t noeud_courant = dico->racine;
+        int i = 0;
+        dict_error_t error = DICT_NOERROR;
+        while (i < taille_mot && error != DICT_NOTFOUND) {
+                while (noeud_courant->sym != mot[i] && noeud_courant != NULL) {
+                        noeud_courant = noeud_courant->frere;
+                }
+                if (noeud_courant->sym == mot[i]) {
+                        if (i == taille_mot) {
+                                resultat = noeud_courant->code;
+                        }else if (noeud_courant->fils == NULL) {
+                                error = DICT_NOTFOUND;
+                        }else {
+                                noeud_courant = noeud_courant->fils;
+                        }
+                }else{
+                        error = DICT_NOTFOUND;
+                }
+        }
+        return error;
+}
+
+dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, char* resultat){
+        int i = 0;
+        int j = 1;
+        for ( i = 0; i < dico->nb_elt || dico->hashmap[i]->code == index; i++) {
+        }
+        if ( dico->hashmap[i]->code == index) {
+                noeud_t noeud_courant = dico->hashmap[i];
+                resultat[0] = noeud_courant->sym;
+                while (noeud_courant->pere != NULL) {
+                        noeud_courant = noeud_courant->pere;
+                        resultat[j] = noeud_courant->sym;
+                        j++;
+                }
+        }else{
+                return DICT_NOTFOUND;
+        }
+        char temp;
+        for (int k = 0; k <= j/2; k++) {
+                temp = resultat[k];
+                resultat[k] = resultat[j-k];
+                resultat[j-k] = temp;
+        }
+        return DICT_NOERROR;
 }
