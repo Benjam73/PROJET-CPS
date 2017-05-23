@@ -4,11 +4,8 @@
 #include "dict.h"
 
 
-<<<<<<< HEAD
-dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict_index_t* resultat){
-=======
-dict_error_t dict_rechercher_mot(dict_t dico, char* mot, int taille_mot, dict_index_t* resultat, int* taille){
->>>>>>> ecc3bed7d005a9d57d48ab0f5cafe72a11cacb82
+dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict_index_t* resultat, int* taille){
+
         noeud_t noeud_courant = dico->racine;
         int i = 0;
         *taille  = 0;
@@ -52,11 +49,7 @@ dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* res
                         resultat[j] = noeud_courant->sym;
                         j++;
                 }
-<<<<<<< HEAD
-        	      
-=======
 
->>>>>>> ecc3bed7d005a9d57d48ab0f5cafe72a11cacb82
         }else{
                 return DICT_NOTFOUND;
         }
@@ -126,10 +119,10 @@ dict_error_t dict_insert(dict_t dico, uint8_t* mot, int taille_mot){
 	noeud_t noeud_courant = malloc(sizeof(struct _node));
 	noeud_t noeud_pere = NULL;
 	noeud_t noeud_frere = malloc(sizeof(struct _node));
-
+	int taille;
 	
 
-	if (dict_rechercher_mot(dico, mot, taille_mot, &index) == DICT_NOTFOUND){
+	if (dict_rechercher_mot(dico, mot, taille_mot, &index, &taille) == DICT_NOTFOUND){
 		while (index_caractere_courant < taille_mot){
 			noeud_courant = rechercher_dans_ligne(ligne_courante, mot[index_caractere_courant], noeud_frere);
 
