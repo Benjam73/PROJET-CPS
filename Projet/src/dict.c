@@ -158,5 +158,14 @@ dict_t dict_new(){
 }
 
 
+dict_error_t dict_reinit(dict_t dico){
+	
+	for(int i=256; i<TAILLE_MAX; i++){
+		free(dico->map[i]);
+		dico->map[i] = NULL;
+	}
+	
+	return DICT_NOERROR;
 
+}
 
