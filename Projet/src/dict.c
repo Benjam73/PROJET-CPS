@@ -9,10 +9,10 @@ dict_error_t dict_rechercher_mot(dict_t dico, char* mot, int taille_mot, dict_in
         int i = 0;
         dict_error_t error = DICT_NOERROR;
         while (i < taille_mot && error != DICT_NOTFOUND) {
-                while (noeud_courant->sym != mot[i] && noeud_courant != NULL) {
+                while (noeud_courant != NULL && noeud_courant->sym != mot[i] ) {
                         noeud_courant = noeud_courant->frere;
                 }
-                if (noeud_courant->sym == mot[i]) {
+                if (noeud_courant != NULL && noeud_courant->sym == mot[i]) {
                         if (i == taille_mot) {
                                 *resultat = noeud_courant->code;
                         }else if (noeud_courant->fils == NULL) {
@@ -23,6 +23,7 @@ dict_error_t dict_rechercher_mot(dict_t dico, char* mot, int taille_mot, dict_in
                 }else{
                         error = DICT_NOTFOUND;
                 }
+								i++;
         }
         return error;
 }
@@ -141,7 +142,7 @@ dict_t dict_new(){
 
 	dico->nb_elt = 0 ;
 
-	char * mot_courant = NULL;
+	char  mot_courant[2];
 
 	mot_courant[1] = '\0' ;
 
@@ -156,7 +157,3 @@ dict_t dict_new(){
 
 	return dico ;
 }
-
-
-
-
