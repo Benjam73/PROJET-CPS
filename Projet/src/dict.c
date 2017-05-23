@@ -4,9 +4,10 @@
 #include "dict.h"
 
 
-dict_error_t dict_rechercher_mot(dict_t dico, char* mot, int taille_mot, dict_index_t* resultat){
+dict_error_t dict_rechercher_mot(dict_t dico, char* mot, int taille_mot, dict_index_t* resultat, int* taille){
         noeud_t noeud_courant = dico->racine;
         int i = 0;
+        *taille  = 0;
         dict_error_t error = DICT_NOERROR;
         while (i < taille_mot && error != DICT_NOTFOUND) {
                 while (noeud_courant != NULL && noeud_courant->sym != mot[i] ) {
@@ -19,6 +20,7 @@ dict_error_t dict_rechercher_mot(dict_t dico, char* mot, int taille_mot, dict_in
                                 error = DICT_NOTFOUND;
                         }else {
                                 noeud_courant = noeud_courant->fils;
+                                *taille ++;
                         }
                 }else{
                         error = DICT_NOTFOUND;
@@ -46,7 +48,7 @@ dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, char* result
                         resultat[j] = noeud_courant->sym;
                         j++;
                 }
-               
+
         }else{
                 return DICT_NOTFOUND;
         }
@@ -183,4 +185,3 @@ dict_error_t dict_reinit(dict_t dico){
 	return DICT_NOERROR;
 
 }
-

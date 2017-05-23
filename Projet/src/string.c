@@ -1,3 +1,4 @@
+#include "string.h"
 
 void fprintf_n_octets(FILE* f, uint8_t* word, int n){
 	for (int i = 0; i < n; i++){
@@ -5,8 +6,14 @@ void fprintf_n_octets(FILE* f, uint8_t* word, int n){
 	}
 }
 
+void fprintf_n_octets_comp(FILE* f, dict_index_t* index, int n){
+	for (int i = 0; i < n; i++){
+		fprintf(f, "%c", index[i]);
+	}
+}
+
 uint8_t* concatenation(uint8_t* w, int wlength, uint8_t* a){
-	uint8_t* wa ;
+	uint8_t* wa = NULL;
 	int i;
 	for (i = 0; i < wlength; i++){
 		wa[i] = w[i];
