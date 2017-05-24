@@ -1,14 +1,11 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
-
 #include "dict.h"
 #include "string.h"
 
 
-
-
-FILE* codage (FILE *f){
+FILE* compression (FILE *f){
         uint8_t* a = NULL;
         uint8_t* w = NULL;
 
