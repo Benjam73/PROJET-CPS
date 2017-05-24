@@ -63,17 +63,17 @@ dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* res
 
 // Retourne le pointeur du noeud ayant c pour symbole et son frere precedent
 // Les deux pointeurs vallent NULL si c n'est pas present
-noeud_t rechercher_dans_ligne(noeud_t liste, uint8_t c, noeud_t frere){
+noeud_t rechercher_dans_ligne(noeud_t liste, uint8_t c, noeud_t* frere){
 
 	noeud_t noeud_courant = liste;
-	frere = noeud_courant;
+	*frere = noeud_courant;
 
 	while(noeud_courant != NULL){
 
 		if(noeud_courant->sym == c){
 			return noeud_courant;
 		}
-		frere = noeud_courant;
+		*frere = noeud_courant;
 		noeud_courant = noeud_courant->frere;
 	}
 
@@ -115,12 +115,13 @@ dict_error_t dict_insert(dict_t dico, uint8_t* mot, int taille_mot){
 	noeud_t noeud_courant = malloc(sizeof(struct _node));
 	noeud_t noeud_pere = NULL;
 	noeud_t noeud_frere = malloc(sizeof(struct _node));
+	noeud_frere = NULL;
 	int taille;
 
 
 	if (dict_rechercher_mot(dico, mot, taille_mot, &index, &taille) == DICT_NOTFOUND){
 		while (index_caractere_courant < taille_mot){
-			noeud_courant = rechercher_dans_ligne(ligne_courante, mot[index_caractere_courant], noeud_frere);
+			noeud_courant = rechercher_dans_ligne(ligne_courante, mot[index_caractere_courant], &noeud_frere);
 
 			if (noeud_courant != NULL){
 				noeud_pere = malloc(sizeof(noeud_t));
@@ -152,6 +153,19 @@ void dict_print (dict_t dico){
 
 }
 
+void ajout_premier(dict_t dico){
+
+	noeud_t courant = malloc(sizeof(struct _node)) ;
+
+	dico->nb_elt = dico->nb_elt + 1;
+
+	courant->sym = 0 ;
+	courant->code = dico->nb_elt-1 ;
+	courant->fils = NULL ;
+	courant->frere = NULL ;
+	dico->racine = courant;
+	dico->map[dico->nb_elt-1] = courant;
+}
 
 dict_t dict_new(){
 
@@ -164,9 +178,13 @@ dict_t dict_new(){
 
 	mot_courant[1] = '\0' ;
 
-	for(int i = 0 ; i < 256 ; i++){
+
+	ajout_premier(dico);
+
+
+	for(int i = 1 ; i < 256 ; i++){
 		// mot_courant[0] = (uint8_t) i ;
-                *mot_courant = (uint8_t) i ;
+        *mot_courant = (uint8_t) i ;
                 // printf("code : %d - mot_courant :  %s\n", (int) i,  mot_courant);
 		dict_insert(dico, mot_courant, 1);
 	}
