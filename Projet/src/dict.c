@@ -21,12 +21,12 @@ dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict
                                 error = DICT_NOTFOUND;
                         }else {
                                 noeud_courant = noeud_courant->fils;
-                                *taille ++;
+                                taille++;
                         }
                 }else{
                         error = DICT_NOTFOUND;
                 }
-								i++;
+				i++;
         }
         return error;
 }
@@ -37,19 +37,18 @@ dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* res
         int j = 1;
 
         for ( i = 0; i < dico->nb_elt && dico->map[i]->code != index; i++) {
-
         }
-	    //printf(" valeur de i : %d \n",i);
+        printf("Valeur du resultat : %s \n",resultat);
+	//printf(" valeur de i : %d \n",i);
         if ( dico->map[i]->code == index) {
+                // printf("Valeur du resultat : %c \n",resultat[1]);
                 noeud_t noeud_courant = dico->map[i];
-            	//printf(" valeur du symbole : %c \n ", noeud_courant->sym);
                 resultat[0] = noeud_courant->sym;
                 while (noeud_courant->pere != NULL) {
                         noeud_courant = noeud_courant->pere;
                         resultat[j] = noeud_courant->sym;
                         j++;
                 }
-
         }else{
                 return DICT_NOTFOUND;
         }
@@ -60,7 +59,7 @@ dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* res
                 resultat[j-k] = temp;
         }
 
-        printf("Valeur du resultat : %s \n",resultat);
+        // printf("Valeur du resultat : %s \n",resultat);
         return DICT_NOERROR;
 }
 
@@ -120,7 +119,7 @@ dict_error_t dict_insert(dict_t dico, uint8_t* mot, int taille_mot){
 	noeud_t noeud_pere = NULL;
 	noeud_t noeud_frere = malloc(sizeof(struct _node));
 	int taille;
-	
+
 
 	if (dict_rechercher_mot(dico, mot, taille_mot, &index, &taille) == DICT_NOTFOUND){
 		while (index_caractere_courant < taille_mot){
@@ -131,7 +130,7 @@ dict_error_t dict_insert(dict_t dico, uint8_t* mot, int taille_mot){
 				noeud_pere = noeud_courant;
 				index_caractere_courant++;
 			}
-			else{	
+			else{
 				ajouter_dans_ligne(dico, noeud_pere, noeud_frere, mot[index_caractere_courant]);
 				return DICT_ADDED;
 			}
@@ -146,10 +145,13 @@ dict_error_t dict_insert(dict_t dico, uint8_t* mot, int taille_mot){
 void dict_print (dict_t dico){
 
 	uint8_t* mot_courant = malloc(sizeof(uint8_t)) ;
+        
+        // printf("Mot courant : %s\n", mot_courant);
 
 	for (int i = 0; i < dico->nb_elt; i++){
 		dict_rechercher_index(dico, i, mot_courant);
-		printf("Code : %d \t Mot courant : %s\n", i, mot_courant);
+                // printf("Code : %d \t Mot courant : %s\n", i, mot_courant);
+		// printf("Code : %d \t Mot courant : %c\n", i, mot_courant[1]);
 	}
 
 }
