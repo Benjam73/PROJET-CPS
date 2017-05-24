@@ -3,8 +3,8 @@
 
 void compression (FILE* f_input, FILE* f_output){
         
-        uint8_t* a = NULL;
-        uint8_t* w = NULL;
+        uint8_t* a = malloc(sizeof(uint8_t)) ;
+        uint8_t* w = malloc(sizeof(uint8_t)) ;
 
         int taille ;
 
@@ -24,7 +24,7 @@ void compression (FILE* f_input, FILE* f_output){
                 else{
                         dict_rechercher_mot(dico, w, wlength+1, index, &taille);
                         fprintf_n_octets_comp(f_output, index, taille);
-                        dict_insert(dico,w, wlength);
+                        dict_insert(dico,concatenation(w, wlength, a), wlength);
                         w = a;
                 }
         }
