@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "dict.c"
+#include "dict.h"
 
 
 int main(int argc, char const *argv[]){

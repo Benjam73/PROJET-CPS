@@ -1,6 +1,8 @@
 #ifndef DICT_H
 #define DICT_H
 #include <stdint.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 typedef short int dict_index_t;  	// le type index
 typedef long dict_char_t;          // le type valeur/caractere
@@ -46,6 +48,9 @@ struct _node {
   struct _node* pere ;    // Le noeud de profondeur inferieure
 };
 
+
+// Affiche dans la console le dictionnaire
+void dict_print (dict_t dico);
 
 // Alloue et renvoie un dictionnaire compose des prefixes de taille 1
 dict_t dict_new();

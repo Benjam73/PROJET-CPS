@@ -52,7 +52,7 @@ $(BUILDDIR)/%.o: $(SOURCEDIR)/%.c
 
 # Nettoie tout le repertoire : fichiers intermediaires ET executables crees
 mrproper:
-	@rm -rf -v $(BINDIR) $(BUILDDIR)
+	@rm -rf -v $(BINDIR)/* $(BUILDDIR)/*
 
 # Nettoie les fichiers intermediaires
 clean:

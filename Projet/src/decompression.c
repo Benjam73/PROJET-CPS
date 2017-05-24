@@ -5,7 +5,7 @@
 #include "dict.h"
 #include "string.h"
 
-int main(int argc, char const *argv[]){
+int decompression (int argc, char const *argv[]){
 	
 	FILE* f_input ;	 
 	FILE* f_output ;
