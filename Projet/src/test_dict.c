@@ -43,6 +43,18 @@ int main(int argc, char const *argv[]){
 	}
 
 
+	if (f_input_x == NULL){
+		fprintf(stdout, "%s\n", "Erreur ouverture ficher entree decompression");
+	}
+	if (f_input_c == NULL){
+		fprintf(stdout, "%s\n", "Erreur ouverture ficher entree compression");
+	}
+	if (f_output_x == NULL){
+		fprintf(stdout, "%s\n", "Erreur ouverture ficher sortie decompression");
+	}
+	if (f_output_c == NULL){
+		fprintf(stdout, "%s\n", "Erreur ouverture ficher sortie compression");
+	}
 
 	dico = dict_new();
 	dict_print(dico);
