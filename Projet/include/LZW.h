@@ -6,7 +6,7 @@
 #include <stdint.h>
 
 #include "dict.h"
-#include "string.h"
+#include "chaine_carac.h"
 
 void compression (FILE* f_input, FILE* f_output);
 
