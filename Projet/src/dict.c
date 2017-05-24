@@ -48,7 +48,7 @@ dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* res
         }else{
                 return DICT_NOTFOUND;
         }
-        uint8_t temp;
+        //uint8_t temp;
        // printf("Valeur de resultat avant : %s \n",resultat);
         // Permet de mettre le mot dans le bon ordre 
        
