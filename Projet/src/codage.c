@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "../include/dictionnaire/dict.h"
-#include "../include/string.h"
+#include "dict.h"
+#include "string.h"
 
 
 

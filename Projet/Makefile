@@ -9,7 +9,7 @@ CC=gcc-6
 # Liste des executables a creer
 EXEC=test_dict
 
-CFLAGS=-Iinclude/dictionnaire/ -Iinclude/ -Wall -g
+CFLAGS=-Iinclude/ -Wall -g
 DFLAGS=-DFRANCAIS
 
 
@@ -39,7 +39,7 @@ LDLIBS=$(addprefix -l, $(LIBNAME))
 all:$(BIN)
 
 
-$(BINDIR)/main: $(OBJECTS)
+$(BINDIR)/%: $(OBJECTS)
 	$(CC) -o $@ $^ $(CFLAGS) $(DFLAGS) $(LDFLAGS) $(LDLIBS)
 
 
