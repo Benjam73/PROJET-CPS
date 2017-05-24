@@ -13,7 +13,7 @@ void fprintf_n_octets_comp(FILE* f, dict_index_t* index, int n){
 }
 
 uint8_t* concatenation(uint8_t* w, int wlength, uint8_t* a){
-	uint8_t* wa = NULL;
+	uint8_t* wa = malloc(sizeof(uint8_t));
 	int i;
 	for (i = 0; i < wlength; i++){
 		wa[i] = w[i];

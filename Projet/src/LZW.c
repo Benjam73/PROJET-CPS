@@ -36,10 +36,11 @@ void decompression (FILE* f_input, FILE* f_output){
                 
         dict_t dico ;
         
-        dict_index_t i1, i2 ; 
-        
-        uint8_t* w1 = NULL;
-        uint8_t* w2 = NULL ;
+        dict_index_t i1 = 0; 
+        dict_index_t i2 = 0;
+
+        uint8_t* w1 = malloc(sizeof(uint8_t)) ;
+        uint8_t* w2 = malloc(sizeof(uint8_t)) ;
         int len_w1 = 0, len_w2 = 0;
         
         uint8_t a[1] ;
