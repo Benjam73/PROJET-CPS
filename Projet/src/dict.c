@@ -38,7 +38,7 @@ dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* res
 
         for ( i = 0; i < dico->nb_elt && dico->map[i]->code != index; i++) {
         }
-        printf("Valeur du resultat : %s \n",resultat);
+        // printf("Valeur du resultat : %s \n",resultat);
 	//printf(" valeur de i : %d \n",i);
         if ( dico->map[i]->code == index) {
                 // printf("Valeur du resultat : %c \n",resultat[1]);
@@ -145,12 +145,11 @@ dict_error_t dict_insert(dict_t dico, uint8_t* mot, int taille_mot){
 void dict_print (dict_t dico){
 
 	uint8_t* mot_courant = malloc(sizeof(uint8_t)) ;
-        
-        // printf("Mot courant : %s\n", mot_courant);
+        // printf("Mot courant : %s\n", i, mot_courant);
 
 	for (int i = 0; i < dico->nb_elt; i++){
 		dict_rechercher_index(dico, i, mot_courant);
-                // printf("Code : %d \t Mot courant : %s\n", i, mot_courant);
+                printf("Code : %d \t Mot courant : %s\n", i, mot_courant);
 		// printf("Code : %d \t Mot courant : %c\n", i, mot_courant[1]);
 	}
 
@@ -163,14 +162,19 @@ dict_t dict_new(){
 
 	dico-> nb_elt = 0 ;
 
-	uint8_t  mot_courant[2];
+	// uint8_t  mot_courant[2];
+        uint8_t*  mot_courant = malloc(sizeof(uint8_t));
 
 	mot_courant[1] = '\0' ;
 
 	for(int i = 0 ; i < 256 ; i++){
-		mot_courant[0] = (uint8_t) i ;
+		// mot_courant[0] = (uint8_t) i ;
+                *mot_courant = (uint8_t) i ;
+                // printf("code : %d - mot_courant :  %s\n", (int) i,  mot_courant);
 		dict_insert(dico, mot_courant, 1);
 	}
+
+        // dict_print(dico);
 	//printf(" valeur de map de 0 : %d \n ",dico->map[0]->code);
 
 	// TODO : ajout cas speciaux
