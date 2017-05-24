@@ -1,6 +1,5 @@
 #include "dict.h"
 
-
 dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict_index_t* resultat, int* taille){
 
         noeud_t noeud_courant = dico->racine;
@@ -32,11 +31,11 @@ dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict
 dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* resultat){
         int i = 0;
         int j = 1;
+        //memset(resultat, 0, sizeof(uint8_t));
 
         for ( i = 0; i < dico->nb_elt && dico->map[i]->code != index; i++) {
         }
         // printf("Valeur du resultat : %s \n",resultat);
-	//printf(" valeur de i : %d \n",i);
         if ( dico->map[i]->code == index) {
                 // printf("Valeur du resultat : %c \n",resultat[1]);
                 noeud_t noeud_courant = dico->map[i];
@@ -50,11 +49,15 @@ dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* res
                 return DICT_NOTFOUND;
         }
         uint8_t temp;
-        for (int k = 0; k <= j/2; k++) {
-                temp = resultat[k];
-                resultat[k] = resultat[j-k];
-                resultat[j-k] = temp;
-        }
+       // printf("Valeur de resultat avant : %s \n",resultat);
+        // Permet de mettre le mot dans le bon ordre 
+       
+        // for (int k = 0; k <= j/2; k++) {
+        //         temp = resultat[k];
+        //         resultat[k] = resultat[j-k];
+        //         resultat[j-k] = temp;
+        // }
+        //printf("Valeur de resultat apres : %s \n",resultat);
 
         // printf("Valeur du resultat : %s \n",resultat);
         return DICT_NOERROR;
@@ -147,7 +150,7 @@ void dict_print (dict_t dico){
 
 	for (int i = 0; i < dico->nb_elt; i++){
 		dict_rechercher_index(dico, i, mot_courant);
-                printf("Code : %d \t Mot courant : %s\n", i, mot_courant);
+        printf("Code : %d \t Mot courant : %s\n", i, mot_courant);
 		// printf("Code : %d \t Mot courant : %c\n", i, mot_courant[1]);
 	}
 

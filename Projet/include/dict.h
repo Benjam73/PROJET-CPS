@@ -3,6 +3,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
+
 
 typedef short int dict_index_t;  	// le type index
 typedef long dict_char_t;          // le type valeur/caractere
