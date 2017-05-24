@@ -23,5 +23,6 @@ uint8_t* concatenation(uint8_t* w, int wlength, uint8_t* a){
 		wa[i] = w[i];
 	}
 	wa[i+1] = a[0];
+	*a = wlength + 1 ;
 	return wa;
 }
