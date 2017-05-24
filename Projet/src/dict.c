@@ -1,57 +1,72 @@
 #include "dict.h"
 
-dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict_index_t* resultat, int* taille){
+dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict_index_t* resultat, int* taille_index){
 
-        noeud_t noeud_courant = dico->racine;
-        int i = 0;
-        *taille  = 0;
-        dict_error_t error = DICT_NOERROR;
-        while (i < taille_mot && error != DICT_NOTFOUND) {
-                while (noeud_courant != NULL && noeud_courant->sym != mot[i] ) {
-                        noeud_courant = noeud_courant->frere;
-                }
-                if (noeud_courant != NULL && noeud_courant->sym == mot[i]) {
-                        if (i == taille_mot) {
-                                *resultat = noeud_courant->code;
-                        }else if (noeud_courant->fils == NULL) {
-                                error = DICT_NOTFOUND;
-                        }else {
-                                noeud_courant = noeud_courant->fils;
-                                taille++;
-                        }
-                }else{
-                        error = DICT_NOTFOUND;
-                }
-				i++;
-        }
-        return error;
+	noeud_t noeud_courant = dico->racine;
+	int i = 0;
+	*taille_index  = 0;
+
+	// On parcourt toutes les lettres de mot
+	while (i < taille_mot) {
+
+		// On parcout la liste des freres jusqu'a atteindre mot[i] 
+		while (noeud_courant != NULL && noeud_courant->sym != mot[i] ) {
+			noeud_courant = noeud_courant->frere;
+		}
+
+		// Si on a bien trouve mot[i] 
+		if (noeud_courant != NULL && noeud_courant->sym == mot[i]) {
+
+			// Si on a trouve le mot ENTIER
+			if (i == taille_mot) {
+				*resultat = noeud_courant->code;
+			}
+			// Sinon si on est au bout de la chaine des fils
+			else if (noeud_courant->fils == NULL) {
+				return DICT_NOTFOUND;
+			}
+			// Sinon on continue a parcourir la chaine des fils
+			else {
+				noeud_courant = noeud_courant->fils;
+				taille_index++;
+			}
+		}
+
+		// Si on a pas trouve le mot
+		else{
+			return DICT_NOTFOUND;
+		}
+
+		i++;
+	}
+	return DICT_NOERROR ;
 }
 
 
 dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* resultat){
-        int i = 0;
-        int j = 1;
+	int i = 0;
+	int j = 1;
         //memset(resultat, 0, sizeof(uint8_t));
 
-        for ( i = 0; i < dico->nb_elt && dico->map[i]->code != index; i++) {
-        }
+	for ( i = 0; i < dico->nb_elt && dico->map[i]->code != index; i++) {
+	}
         // printf("Valeur du resultat : %s \n",resultat);
-        if ( dico->map[i]->code == index) {
+	if ( dico->map[i]->code == index) {
                 // printf("Valeur du resultat : %c \n",resultat[1]);
-                noeud_t noeud_courant = dico->map[i];
-                resultat[0] = noeud_courant->sym;
-                while (noeud_courant->pere != NULL) {
-                        noeud_courant = noeud_courant->pere;
-                        resultat[j] = noeud_courant->sym;
-                        j++;
-                }
-        }else{
-                return DICT_NOTFOUND;
-        }
+		noeud_t noeud_courant = dico->map[i];
+		resultat[0] = noeud_courant->sym;
+		while (noeud_courant->pere != NULL) {
+			noeud_courant = noeud_courant->pere;
+			resultat[j] = noeud_courant->sym;
+			j++;
+		}
+	}else{
+		return DICT_NOTFOUND;
+	}
         //uint8_t temp;
        // printf("Valeur de resultat avant : %s \n",resultat);
         // Permet de mettre le mot dans le bon ordre 
-       
+
         // for (int k = 0; k <= j/2; k++) {
         //         temp = resultat[k];
         //         resultat[k] = resultat[j-k];
@@ -60,7 +75,7 @@ dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* res
         //printf("Valeur de resultat apres : %s \n",resultat);
 
         // printf("Valeur du resultat : %s \n",resultat);
-        return DICT_NOERROR;
+	return DICT_NOERROR;
 }
 
 
@@ -150,7 +165,7 @@ void dict_print (dict_t dico){
 
 	for (int i = 0; i < dico->nb_elt; i++){
 		dict_rechercher_index(dico, i, mot_courant);
-        printf("Code : %d \t Mot courant : %s\n", i, mot_courant);
+		printf("Code : %d \t Mot courant : %s\n", i, mot_courant);
 		// printf("Code : %d \t Mot courant : %c\n", i, mot_courant[1]);
 	}
 
@@ -177,7 +192,7 @@ dict_t dict_new(){
 	dico-> nb_elt = 0 ;
 
 	// uint8_t  mot_courant[2];
-        uint8_t*  mot_courant = malloc(sizeof(uint8_t));
+	uint8_t*  mot_courant = malloc(sizeof(uint8_t));
 
 	mot_courant[1] = '\0' ;
 
@@ -187,7 +202,7 @@ dict_t dict_new(){
 
 	for(int i = 1 ; i < 256 ; i++){
 		// mot_courant[0] = (uint8_t) i ;
-        *mot_courant = (uint8_t) i ;
+		*mot_courant = (uint8_t) i ;
                 // printf("code : %d - mot_courant :  %s\n", (int) i,  mot_courant);
 		dict_insert(dico, mot_courant, 1);
 	}
