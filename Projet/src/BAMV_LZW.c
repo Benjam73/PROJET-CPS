@@ -6,14 +6,16 @@
 #define true 1
 #define false 0
 
-
+// Retourne : 
+//   0 si tout s'est bien passé
+//   -1 si l'appel n'etait pas correct ou que l'utilisateur a demandé de l'aide
+//   1 si un des arguments n'etait pas un fichier valable
 int main(int argc, char const *argv[]){
 
 	int argument_aide = false, comp = false, decomp =false ;
 	
 
 	FILE *f_input_c, *f_output_c, *f_input_x, *f_output_x ;
-	dict_t dico ;
 
 	
 	for (int i = 1 ; i < argc && !argument_aide ; i++){
@@ -25,7 +27,7 @@ int main(int argc, char const *argv[]){
 	if(argc < 3 || argc > 5 || argument_aide){
 		fprintf(stdout, "%s [-c fichier_entree ficher_sortie] [-x fichier_entree ficher_sortie]\n", argv[0]);
 		fprintf(stdout, "Arguments : \n\t -c : compression\n\t -x : decompression\n");
-		return -1 ;
+		return 1 ;
 	}
 
 
@@ -43,28 +45,36 @@ int main(int argc, char const *argv[]){
 	}
 
 
-	if (f_input_x == NULL){
-		fprintf(stdout, "%s\n", "Erreur ouverture ficher entree decompression");
-	}
-	if (f_input_c == NULL){
-		fprintf(stdout, "%s\n", "Erreur ouverture ficher entree compression");
-	}
-	if (f_output_x == NULL){
-		fprintf(stdout, "%s\n", "Erreur ouverture ficher sortie decompression");
-	}
-	if (f_output_c == NULL){
-		fprintf(stdout, "%s\n", "Erreur ouverture ficher sortie compression");
+	if(comp) {
+		if (f_input_c == NULL){
+			fprintf(stdout, "%s\n", "Erreur ouverture ficher entree compression");
+			return 1 ;
+		}
+		if (f_output_c == NULL){
+			fprintf(stdout, "%s\n", "Erreur ouverture ficher sortie compression");
+			return 1 ;
+		}		
 	}
 
-	dico = dict_new();
-	dict_print(dico);
+	if(decomp){
+		if (f_input_x == NULL){
+			fprintf(stdout, "%s\n", "Erreur ouverture ficher entree decompression");
+			return 1 ;
+		}
+		if (f_output_x == NULL){
+			fprintf(stdout, "%s\n", "Erreur ouverture ficher sortie decompression");
+			return 1 ;
+		}
+	}
 
 
 	if (comp){
+		fprintf(stdout, "On effectue une compression\n");
 		compression (f_input_c, f_output_c);
 	}
 
 	if (decomp){
+		fprintf(stdout, "On effectue une decompression\n");
 		decompression (f_input_x, f_output_x);
 	}
 
