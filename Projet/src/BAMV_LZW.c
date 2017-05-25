@@ -42,7 +42,9 @@ int main(int argc, char *argv[]){
 
 	FILE *f_input_c, *f_output_c, *f_input_x, *f_output_x ;
 
-
+	// !!! TEST !!!
+	printf("%s\n", dec_to_binarray(256, 9));
+	// !!! TEST !!!
 	
 	for (int i = 1 ; i < argc && !argument_aide ; i++){
 		if (strcmp(argv[i], "-h") == 0){
