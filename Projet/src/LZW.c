@@ -9,7 +9,7 @@ void compression (FILE* f_input, FILE* f_output){
         int taille ;
 
         dict_t dico = dict_new();
-        dict_index_t *index = 0;
+        dict_index_t index = 0;
 
         fread(w, 1, 1, f_input);
         int wlength = 1;
@@ -17,20 +17,20 @@ void compression (FILE* f_input, FILE* f_output){
                 
                 fread(a, 1, 1, f_input);
                 
-                if (dict_rechercher_mot(dico, concatenation(w, wlength, a), wlength+1, index, &taille) ==  DICT_NOERROR) {
+                if (dict_rechercher_mot(dico, concatenation(w, wlength, a), wlength+1, &index, &taille) ==  DICT_NOERROR) {
                         w = concatenation(w, wlength, a);
                         wlength++;
                 }
                 else{
-                        dict_rechercher_mot(dico, w, wlength+1, index, &taille);
+                        dict_rechercher_mot(dico, w, wlength+1, &index, &taille);
                         // fprintf_n_octets_comp(f_output, index, taille);
-                        fprintf(f_output, "%d", *index);
+                        fprintf(f_output, "%d", index);
                         dict_insert(dico,concatenation(w, wlength, a), wlength+1);
                         w = a;
                 }
         }
-        dict_rechercher_mot(dico, w, wlength+1, index, &taille);
-        fprintf_n_octets_comp(f_output, index, taille);
+        dict_rechercher_mot(dico, w, wlength+1, &index, &taille);
+        fprintf_n_octets_comp(f_output, &index, taille);
 }
 
 void decompression (FILE* f_input, FILE* f_output){

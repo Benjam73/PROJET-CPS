@@ -6,16 +6,19 @@
 #define true 1
 #define false 0
 
+
+
 // Retourne : 
 //   0 si tout s'est bien passé
 //   -1 si l'appel n'etait pas correct ou que l'utilisateur a demandé de l'aide
 //   1 si un des arguments n'etait pas un fichier valable
-int main(int argc, char const *argv[]){
+int main(int argc, char *argv[]){
 
 	int argument_aide = false, comp = false, decomp =false ;
 	
 
 	FILE *f_input_c, *f_output_c, *f_input_x, *f_output_x ;
+
 
 	
 	for (int i = 1 ; i < argc && !argument_aide ; i++){
@@ -78,6 +81,17 @@ int main(int argc, char const *argv[]){
 		decompression (f_input_x, f_output_x);
 	}
 
+
+
+	if (comp){
+		fclose(f_input_c);
+		fclose(f_output_c);
+	}
+
+	if (decomp){
+		fclose(f_input_x);
+		fclose(f_output_x);	
+	}
 
 	return 0;
 }

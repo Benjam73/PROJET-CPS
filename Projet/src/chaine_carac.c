@@ -1,9 +1,12 @@
 #include "chaine_carac.h"
 
+// Cette fonction a été testee, elle fonctionne
 void fprintf_n_octets(FILE* f, uint8_t* word, int n){
 	for (int i = 0; i < n; i++){
 		fprintf(f, "%c", word[i]);
-		fprintf(stdout, "%s\n", "On ecrit");
+		#ifdef DEBUG
+		fprintf(stdout, " -> On ecrit\n");
+		#endif
 	}
 	fflush(f);
 }
@@ -11,7 +14,9 @@ void fprintf_n_octets(FILE* f, uint8_t* word, int n){
 void fprintf_n_octets_comp(FILE* f, dict_index_t* index, int n){
 	for (int i = 0; i < n; i++){
 		fprintf(f, "%c", index[i]);
-		fprintf(stdout, "%s\n", "On ecrit");		
+		#ifdef DEBUG
+		fprintf(stdout, " -> On ecrit\n");
+		#endif
 	}
 	fflush(f);
 }
@@ -22,7 +27,6 @@ uint8_t* concatenation(uint8_t* w, int wlength, uint8_t* a){
 	for (i = 0; i < wlength; i++){
 		wa[i] = w[i];
 	}
-	wa[i+1] = a[0];
-	*a = wlength + 1 ;
+	wa[i] = a[0];
 	return wa;
 }
