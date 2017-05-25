@@ -31,6 +31,7 @@ int main(int argc, char const *argv[]){
 	}
 
 
+	// Ouverture fichiers donnes en parametres
 	for (int i = 1 ; i < argc && !(comp && decomp) ; i++){
 		if (strcmp(argv[i], "-c") == 0){
 			f_input_c = fopen(argv[i + 1], "r");
@@ -43,8 +44,7 @@ int main(int argc, char const *argv[]){
 			decomp = true ;
 		}
 	}
-
-
+	// Verifications ouverture fichiers donnes en parametres
 	if(comp) {
 		if (f_input_c == NULL){
 			fprintf(stdout, "%s\n", "Erreur ouverture ficher entree compression");
@@ -55,7 +55,6 @@ int main(int argc, char const *argv[]){
 			return 1 ;
 		}		
 	}
-
 	if(decomp){
 		if (f_input_x == NULL){
 			fprintf(stdout, "%s\n", "Erreur ouverture ficher entree decompression");
@@ -66,6 +65,7 @@ int main(int argc, char const *argv[]){
 			return 1 ;
 		}
 	}
+
 
 
 	if (comp){

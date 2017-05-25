@@ -7,7 +7,7 @@ CC=gcc-6
 #Version 6 de gcc pour avoir les dernieres option de compilation en -Wall (notamment sur l'indentation trompeuse)
 
 # Liste des executables a creer
-EXEC=test_dict
+EXEC=BAMV_LZW
 
 CFLAGS=-Iinclude/ -Wall -g
 DFLAGS=-DFRANCAIS
