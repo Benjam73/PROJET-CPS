@@ -2,39 +2,56 @@
 
 
 void compression (FILE* f_input, FILE* f_output){
-        
+
+        dict_t dico ;
+
         uint8_t* a = malloc(sizeof(uint8_t)) ;
         uint8_t* w = malloc(sizeof(uint8_t)) ;
 
         int taille ;
 
-        dict_t dico = dict_new();
         dict_index_t index = 0;
 
+
+        // D <- ens. de toutes les chaînes de longueur 1
+        dico = dict_new();        
+
+        // w <- [1er octet de E]
         fread(w, 1, 1, f_input);
         int wlength = 1;
+
+        // tant que la fin de E n'est pas atteinte
         while (!feof(f_input)) {
-                
+
+                // a <- octet suivant de E
                 fread(a, 1, 1, f_input);
                 
+                // si w .a est dans D alors
                 if (dict_rechercher_mot(dico, concatenation(w, wlength, a), wlength+1, &index, &taille) ==  DICT_NOERROR) {
+                       // w <- w .a                        
                         w = concatenation(w, wlength, a);
                         wlength++;
                 }
+                // sinon
                 else{
+                        // ecrire sur S l'index associe a w dans D 
                         dict_rechercher_mot(dico, w, wlength, &index, &taille);
-                        //fprintf_n_octets_comp(f_output, index, taille);
+                        /* Ici, index est un short int (16bits) mais contient 9bits de donnees
+                         * Ainsi, on utilise une procedure ecrivant les 8 premiers bits dans le fichier et sauvegardant le dernier bit afin de l'ecrire au rang suivant
+                         */
                         fprintf(f_output, "%d", index);
+                        // D <- D U {w.a}
                         dict_insert(dico,concatenation(w, wlength, a), wlength+1);
-                        w = a;
+                        *w = *a;
                 }
         }
+        // ecrire sur S l'index associé à w
         dict_rechercher_mot(dico, w, wlength+1, &index, &taille);
         fprintf_n_octets_comp(f_output, &index, taille);
 }
 
 void decompression (FILE* f_input, FILE* f_output){
-                
+
         dict_t dico ;
         
         dict_index_t i1 = 0; 
@@ -46,10 +63,15 @@ void decompression (FILE* f_input, FILE* f_output){
         
         uint8_t a[1] ;
 
+
+        // D <- ens. de toutes les chaînes de longueur 1
         dico = dict_new();
 
         // i' <- 1er code de S
         fread(&i1, 1, 1, f_input) ;
+        #ifdef DEBUG
+        printf("On a lu %d\n", i1);
+        #endif
         
         // a <- chaine d'index i dans D
         dict_rechercher_index(dico, i1, a);
@@ -66,7 +88,10 @@ void decompression (FILE* f_input, FILE* f_output){
 
                 // i' <- code suivant de S
                 fread(&i2, 1, 1, f_input);
-                
+                // #ifdef DEBUG
+                // printf("On a lu %d\n", i2);
+                // #endif
+
                 // On place la chaine d'index i2 dans w2
                 // Si on a une erreur, c'est que i2 n'est pas dans dico
                 if (dict_rechercher_index(dico, i2, w2) != DICT_NOERROR){

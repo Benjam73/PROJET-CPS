@@ -6,7 +6,30 @@
 #define true 1
 #define false 0
 
+// !!! TEST !!!
+void test(char* str){
 
+	dict_index_t *word = malloc(sizeof(dict_index_t));
+	uint8_t *a = malloc(sizeof(uint8_t));
+
+	FILE *f = fopen(str, "w");
+
+	if (f == NULL)
+	{
+		printf("Erreur ouverture\n");
+	}
+
+	word[0] = 100 ;
+	// word[1] = '2' ;
+	// a[0] = '3' ;
+
+	fprintf_n_octets_comp(f, word, 1) ;
+	// fprintf_n_octets(f, a, 1) ;
+	// fprintf_n_octets(f, concatenation(word, 2, a), 3) ;
+	
+	fclose(f);
+}
+// !!! TEST !!!
 
 // Retourne : 
 //   0 si tout s'est bien passé
@@ -37,13 +60,13 @@ int main(int argc, char *argv[]){
 	// Ouverture fichiers donnes en parametres
 	for (int i = 1 ; i < argc && !(comp && decomp) ; i++){
 		if (strcmp(argv[i], "-c") == 0){
-			f_input_c = fopen(argv[i + 1], "r");
-			f_output_c = fopen(argv[i + 2], "w");
+			f_input_c = fopen(argv[i + 1], "rb");
+			f_output_c = fopen(argv[i + 2], "wb");
 			comp = true ;
 		}
 		if (strcmp(argv[i], "-x") == 0){
-			f_input_x = fopen(argv[i + 1], "r");
-			f_output_x = fopen(argv[i + 2], "w");
+			f_input_x = fopen(argv[i + 1], "rb");
+			f_output_x = fopen(argv[i + 2], "wb");
 			decomp = true ;
 		}
 	}

@@ -10,7 +10,7 @@ CC=gcc-6
 EXEC=BAMV_LZW
 
 CFLAGS=-Iinclude/ -Wall -g
-DFLAGS=-DFRANCAIS
+DFLAGS=-DDEBUG
 
 
 ## Zone de traitement des noms fichiers bruts (ajout de préfixes, suffixes, gestion de l'emplacement)

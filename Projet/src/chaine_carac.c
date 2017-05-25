@@ -13,9 +13,10 @@ void fprintf_n_octets(FILE* f, uint8_t* word, int n){
 
 void fprintf_n_octets_comp(FILE* f, dict_index_t* index, int n){
 	for (int i = 0; i < n; i++){
-		fprintf(f, "%c", index[i]);
+		fprintf(f, "%d", index[i]);
 		#ifdef DEBUG
 		fprintf(stdout, " -> On ecrit\n");
+		fflush(stdout);
 		#endif
 	}
 	fflush(f);
