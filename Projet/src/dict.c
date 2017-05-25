@@ -5,7 +5,7 @@ dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict
 	noeud_t noeud_courant = dico->racine;
 	int i = 0;
 	*taille_index  = 0;
-
+	*resultat = dico->nb_elt;
 	// On parcourt toutes les lettres de mot
 	while (i < taille_mot) {
 
@@ -25,6 +25,7 @@ dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict
 			else if (noeud_courant->fils == NULL) {
 				return DICT_NOTFOUND;
 			}
+			
 			// Sinon on continue a parcourir la chaine des fils
 			else {
 				noeud_courant = noeud_courant->fils;
@@ -63,7 +64,7 @@ dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* res
 		return DICT_NOTFOUND;
 	}
 	// uint8_t temp;
-	// // Permet de mettre le mot dans le bon ordre 
+	// Permet de mettre le mot dans le bon ordre 
 	// if(j != 1){
 	// 	for (int k = 0; k <= j/2; k++) {
 	// 		temp = resultat[k];
@@ -184,13 +185,27 @@ void ajout_premier(dict_t dico){
 	dico->map[dico->nb_elt-1] = courant;
 }
 
+void ajout_speciaux(dict_t dico){
+
+	noeud_t courant = malloc(sizeof(struct _node)) ;
+
+	//EndOfMessage = 256
+	dico->nb_elt = dico->nb_elt + 1;
+
+	courant->sym = ' ';
+	courant->code = dico->nb_elt-1 ;
+	courant->fils = NULL ;
+	courant->frere = NULL ;
+	dico->racine = courant;
+	dico->map[dico->nb_elt-1] = courant;
+}
+
 dict_t dict_new(){
 
 	dict_t dico = malloc(sizeof(struct _dict)) ;
 
 	dico-> nb_elt = 0 ;
 
-	// uint8_t  mot_courant[2];
 	uint8_t*  mot_courant = malloc(sizeof(uint8_t));
 
 	mot_courant[1] = '\0' ;
@@ -200,18 +215,14 @@ dict_t dict_new(){
 
 
 	for(int i = 1 ; i < 256 ; i++){
-		// mot_courant[0] = (uint8_t) i ;
 		*mot_courant = (uint8_t) i ;
-                // printf("code : %d - mot_courant :  %s\n", (int) i,  mot_courant);
 		dict_insert(dico, mot_courant, 1);
 	}
 
-        // dict_print(dico);
-	//printf(" valeur de map de 0 : %d \n ",dico->map[0]->code);
 
 	// TODO : ajout cas speciaux
 	// EndOfMessage, ResetDictionnaire, AgrandirDictionnaire
-
+	//ajout_speciaux(dico);
 
 	return dico ;
 }
