@@ -22,8 +22,8 @@ void compression (FILE* f_input, FILE* f_output){
                         wlength++;
                 }
                 else{
-                        dict_rechercher_mot(dico, w, wlength+1, &index, &taille);
-                        // fprintf_n_octets_comp(f_output, index, taille);
+                        dict_rechercher_mot(dico, w, wlength, &index, &taille);
+                        //fprintf_n_octets_comp(f_output, index, taille);
                         fprintf(f_output, "%d", index);
                         dict_insert(dico,concatenation(w, wlength, a), wlength+1);
                         w = a;

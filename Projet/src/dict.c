@@ -18,7 +18,7 @@ dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict
 		if (noeud_courant != NULL && noeud_courant->sym == mot[i]) {
 
 			// Si on a trouve le mot ENTIER
-			if (i == taille_mot) {
+			if (i == taille_mot - 1) {
 				*resultat = noeud_courant->code;
 			}
 			// Sinon si on est au bout de la chaine des fils
