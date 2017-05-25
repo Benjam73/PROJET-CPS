@@ -28,7 +28,7 @@ dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict
 			// Sinon on continue a parcourir la chaine des fils
 			else {
 				noeud_courant = noeud_courant->fils;
-				taille_index++;
+				*taille_index = *taille_index + 1;
 			}
 		}
 
@@ -46,13 +46,12 @@ dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict
 dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* resultat){
 	int i = 0;
 	int j = 1;
-        //memset(resultat, 0, sizeof(uint8_t));
 
 	for ( i = 0; i < dico->nb_elt && dico->map[i]->code != index; i++) {
 	}
         // printf("Valeur du resultat : %s \n",resultat);
 	if ( dico->map[i]->code == index) {
-                // printf("Valeur du resultat : %c \n",resultat[1]);
+       // printf("Valeur du resultat : %c \n",resultat[1]);
 		noeud_t noeud_courant = dico->map[i];
 		resultat[0] = noeud_courant->sym;
 		while (noeud_courant->pere != NULL) {
@@ -63,18 +62,16 @@ dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* res
 	}else{
 		return DICT_NOTFOUND;
 	}
-        //uint8_t temp;
-       // printf("Valeur de resultat avant : %s \n",resultat);
-        // Permet de mettre le mot dans le bon ordre 
+	// uint8_t temp;
+	// // Permet de mettre le mot dans le bon ordre 
+	// if(j != 1){
+	// 	for (int k = 0; k <= j/2; k++) {
+	// 		temp = resultat[k];
+	// 		resultat[k] = resultat[j-k];
+	// 		resultat[j-k] = temp;
+	// 	}
+	// }
 
-        // for (int k = 0; k <= j/2; k++) {
-        //         temp = resultat[k];
-        //         resultat[k] = resultat[j-k];
-        //         resultat[j-k] = temp;
-        // }
-        //printf("Valeur de resultat apres : %s \n",resultat);
-
-        // printf("Valeur du resultat : %s \n",resultat);
 	return DICT_NOERROR;
 }
 
@@ -113,7 +110,9 @@ dict_error_t ajouter_dans_ligne(dict_t dico, noeud_t pere, noeud_t frere, uint8_
 	courant->fils = NULL ;
 	courant->frere = NULL ;
 	courant->pere = pere ;
-
+	if(pere != NULL){
+		pere->fils = courant ;
+	}
 	dico->map[dico->nb_elt-1] = courant;
 
  	//printf("valeur de map[%d] = %d \n",dico->nb_elt-1,dico->map[dico->nb_elt-1]->code);
