@@ -47,14 +47,4 @@ void fprintf_n_octets_comp(FILE* f, dict_index_t* index, int n);
  */
 uint8_t* concatenation(uint8_t* w, int wlength, uint8_t* a);
 
-/**
- * @brief      Retourne l'ecriture binaire de n
- *
- * @param[in]  n                      l'index a convertir
- * @param[in]  taille_reelle_donnees  La taille de l'index en bits
- *
- * @return     le tableau de caracters de taille taille_reelle_donnees correspondant a l'ecriture en binaire de n
- */
-//char* dec_to_binarray(dict_index_t n, int taille_reelle_donnees) ;
-
 #endif //_STRING

@@ -45,33 +45,3 @@ uint8_t* concatenation(uint8_t* w, int wlength, uint8_t* a){
 	wa[i] = a[0];
 	return wa;
 }
-
-// char* dec_to_binarray(dict_index_t n, int taille_reelle_donnees){
-//   int c, d, count;
-//   char *pointer;
-
-//   count = 0;
-//   pointer = (char*) malloc(taille_reelle_donnees);
-
-//   if ( pointer == NULL ){
-//     exit(EXIT_FAILURE);
-//   }
-
-//   printf("%lu\n", sizeof(dict_index_t));
-
-//   for ( c = taille_reelle_donnees-1 ; c >= 0 ; c--){
-//     d = n >> c;
-
-//     if ( d & 1 ){
-//       *(pointer+count) = 1 + '0';
-//     }
-//     else{
-//       *(pointer+count) = 0 + '0';
-//     }
-
-//     count++;
-//   }
-//   *(pointer+count) = '\0';
-
-//   return  pointer;
-// }

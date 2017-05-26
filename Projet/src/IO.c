@@ -64,3 +64,43 @@ dict_index_t binarray_to_dec(uint8_t* array, int array_length){
   return res ;
 
 }
+
+void fprintf_index (FILE* f, uint8_t* current_buffer, int* buffer_length, uint8_t* index, int* index_length){
+
+  // Buffer de 8 uint8_t pour fwrite
+  uint8_t* writing_buffer = malloc(8*sizeof(uint8_t)) ;
+
+
+  if (writing_buffer == NULL){
+    exit(EXIT_FAILURE);
+  }
+
+  // Recopie du buffer precedent dans le buffer a ecrire
+  for (int i = 0; i < *buffer_length; i++){
+    writing_buffer[i] = current_buffer[i] ;
+  }
+
+  // On complete le buffer a ecrire avec l'index
+  for (int i = 0 ; i < 8 - *buffer_length ; i++){
+    // On ecrit index[0 .. 8 - buffer_length] dans writing_buffer[buffer_length+1 .. 8]
+    writing_buffer[*buffer_length + 1 + i] = index[i] ;
+  }
+
+  // On ecrit ce premier buffer
+  if (fwrite(writing_buffer, 1, 1, f) < 1){
+    exit(EXIT_FAILURE);
+  }
+
+
+  // FIXME : A TERMNIER
+  
+  // On verifie s'il reste (dans index) de quoi remplir completement un buffer d'ecriture
+  // Si oui on l'ecrit
+  /* Code */
+
+  // On recopie les bits restants de l'index vers le buffer courant
+  /* Code */
+  
+  // End(FIXME : A TERMNIER)
+
+}
