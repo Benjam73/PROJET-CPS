@@ -13,7 +13,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <inttypes.h>
 #include "dict.h"
+
+void test_chaine_carac();
 
 /**
  * @brief      Fonction permettant d'ecrire n octets contenant de word dans le fichier f
@@ -52,6 +55,6 @@ uint8_t* concatenation(uint8_t* w, int wlength, uint8_t* a);
  *
  * @return     le tableau de caracters de taille taille_reelle_donnees correspondant a l'ecriture en binaire de n
  */
-char* dec_to_binarray(dict_index_t n, int taille_reelle_donnees) ;
+//char* dec_to_binarray(dict_index_t n, int taille_reelle_donnees) ;
 
 #endif //_STRING

@@ -1,35 +1,14 @@
 #include <stdlib.h>
+#include <string.h>
+
 #include "dict.h"
 #include "LZW.h"
-#include <string.h>
+#include "IO.h"
 
 #define true 1
 #define false 0
 
-// !!! TEST !!!
-void test(char* str){
 
-	dict_index_t *word = malloc(sizeof(dict_index_t));
-	uint8_t *a = malloc(sizeof(uint8_t));
-
-	FILE *f = fopen(str, "w");
-
-	if (f == NULL)
-	{
-		printf("Erreur ouverture\n");
-	}
-
-	word[0] = 100 ;
-	// word[1] = '2' ;
-	// a[0] = '3' ;
-
-	fprintf_n_octets_comp(f, word, 1) ;
-	// fprintf_n_octets(f, a, 1) ;
-	// fprintf_n_octets(f, concatenation(word, 2, a), 3) ;
-	
-	fclose(f);
-}
-// !!! TEST !!!
 
 // Retourne : 
 //   0 si tout s'est bien passé
@@ -42,10 +21,14 @@ int main(int argc, char *argv[]){
 
 	FILE *f_input_c, *f_output_c, *f_input_x, *f_output_x ;
 
-	// !!! TEST !!!
-	printf("%s\n", dec_to_binarray(256, 9));
-	// !!! TEST !!!
+	#ifdef TEST_IO
+	test_IO();
+	#endif
 	
+	#ifdef TEST_CHAINE_CARAC
+	test_chaine_carac();
+	#endif
+
 	for (int i = 1 ; i < argc && !argument_aide ; i++){
 		if (strcmp(argv[i], "-h") == 0){
 			argument_aide = true ;
