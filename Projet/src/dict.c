@@ -51,7 +51,7 @@ dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* res
 	for ( i = 0; i < dico->nb_elt && dico->map[i]->code != index; i++) {
 	}
         // printf("Valeur du resultat : %s \n",resultat);
-	if ( dico->map[i]->code == index) {
+	if ( i < dico->nb_elt && dico->map[i]->code == index) {
        // printf("Valeur du resultat : %c \n",resultat[1]);
 		noeud_t noeud_courant = dico->map[i];
 		resultat[0] = noeud_courant->sym;
@@ -63,15 +63,15 @@ dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* res
 	}else{
 		return DICT_NOTFOUND;
 	}
-	// uint8_t temp;
+	uint8_t temp;
 	// Permet de mettre le mot dans le bon ordre 
-	// if(j != 1){
-	// 	for (int k = 0; k <= j/2; k++) {
-	// 		temp = resultat[k];
-	// 		resultat[k] = resultat[j-k];
-	// 		resultat[j-k] = temp;
-	// 	}
-	// }
+	if(j != 1){
+		for (int k = 0; k < j/2; k++) {
+			temp = resultat[k];
+			resultat[k] = resultat[j-k-1];
+			resultat[j-k-1] = temp;
+		}
+	}
 
 	return DICT_NOERROR;
 }
@@ -223,7 +223,6 @@ dict_t dict_new(){
 	// TODO : ajout cas speciaux
 	// EndOfMessage, ResetDictionnaire, AgrandirDictionnaire
 	//ajout_speciaux(dico);
-
 	return dico ;
 }
 
