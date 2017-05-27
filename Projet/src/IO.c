@@ -64,7 +64,7 @@ void test_IO(){
 
 
 
-uint8_t* dec_to_binarray(dict_index_t n, int array_length){
+uint8_t* dec_to_binarray(const dict_index_t n, const int array_length){
 
   int offset, bit, count;
   uint8_t *pointer;
@@ -94,14 +94,14 @@ uint8_t* dec_to_binarray(dict_index_t n, int array_length){
   return  pointer;
 }
 
-void fprintf_binarray (FILE* f, uint8_t *binarray, const int array_length){
+void fprintf_binarray (FILE* f, const uint8_t *binarray, const int array_length){
 
   for (int i = 0; i < array_length; ++i){
     fprintf(f, "%" PRIu8 "",binarray[i]);
   }
 }
 
-dict_index_t binarray_to_dec(uint8_t* array, int array_length){
+dict_index_t binarray_to_dec(const uint8_t* array, const int array_length){
 
   dict_index_t res = 0 ; 
 
@@ -194,19 +194,22 @@ void fflush_index (FILE* f, uint8_t* current_buffer, const int buffer_length){
   fprintf(stdout, "On va ajouter %i bit(s) de padding\n", 8 - buffer_length);
   #endif
   
-  // On place les 0s de padding a la fin du buffer
-  for (int i = buffer_length; i < 8 - buffer_length; i++){
-    current_buffer[i] = 0 ;
+  if (buffer_length != 0){
+    // On place les 0s de padding a la fin du buffer
+    for (int i = buffer_length; i < 8 - buffer_length; i++){
+      current_buffer[i] = 0 ;
+    }
+
+    // On ecrit ce buffer
+    #ifdef DEBUG
+    fprintf(stdout, "On va ecrire :\t\t"); fprintf_binarray(stdout, current_buffer, 8); fprintf(stdout, "\n");
+    #endif
+    if (fwrite(current_buffer, 1, 8, f) < 1){
+      #ifdef DEBUG
+      fprintf(stdout, "Erreur d'ecriture\n");
+      #endif
+      exit(EXIT_FAILURE);
+    }
   }
 
-  // On ecrit ce buffer
-  #ifdef DEBUG
-  fprintf(stdout, "On va ecrire :\t\t"); fprintf_binarray(stdout, current_buffer, 8); fprintf(stdout, "\n");
-  #endif
-  if (fwrite(current_buffer, 1, 8, f) < 1){
-    #ifdef DEBUG
-    fprintf(stdout, "Erreur d'ecriture\n");
-    #endif
-    exit(EXIT_FAILURE);
-  }
 }
