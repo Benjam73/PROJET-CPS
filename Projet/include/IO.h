@@ -48,8 +48,10 @@ dict_index_t binarray_to_dec(uint8_t* array, int array_length);
  * @param      index           l'index a ecrire
  * @param      index_length    la longueur de celui-ci (9 par defaut, jusqu'a atteinder signal d'augmentation du dictionnaire)
  */
-void fprintf_index (FILE* f, uint8_t* current_buffer, int* buffer_length, uint8_t* index, int* index_length);
+void fprintf_index (FILE* f, uint8_t* current_buffer, int* buffer_length, const uint8_t* index, const int index_length);
 // Cette fonction ne doit pas etre appelee avec index valant "AgrandirDictionnaire" ni "ReinitialiserDictionnaire"
 
+
+void fflush_index (FILE* f, uint8_t* current_buffer, const int buffer_length);
 
 #endif //_IO
