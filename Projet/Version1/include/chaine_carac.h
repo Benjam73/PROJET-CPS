@@ -47,11 +47,36 @@ void fprintf_n_octets_comp(FILE* f, dict_index_t* index, int n);
  */
 uint8_t* concatenation(uint8_t* w, int wlength, uint8_t* a);
 
-
+/**
+ * @brief      Permet de nous donner la taille du tableau w1
+ *
+ * @param      w1    Le tableau dont il faut determiner la taille
+ *
+ * @return     La taille du tableau
+ */
 int adapter_longueur(uint8_t* w1);
 
+
+/**
+ * @brief      Fonction strcmp mais pour tableau de uint8_t
+ *
+ * @param      tab     Le premier tableau a comparer
+ * @param      tab2    Le deuxieme tableau a comparer
+ * @param[in]  taille  La taille du premier tableau
+ *
+ * @return     renvoie 1 si les tableaux sont identiques, 0 sinon
+ */
 int uint8_cmp(uint8_t* tab, char* tab2, int taille);
 
+
+/**
+ * @brief      Fonction atoi
+ *
+ * @param      tab     Le tableau a convertir en dict_index_t
+ * @param[in]  taille  La taille du tableau
+ *
+ * @return     Le tableau tab convertie en dict_index_t
+ */
 dict_index_t to_index(uint8_t* tab, int taille);
 
 #endif //_STRING
