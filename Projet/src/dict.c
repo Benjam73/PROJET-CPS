@@ -196,8 +196,8 @@ void ajout_speciaux(dict_t dico){
 	courant->code = dico->nb_elt-1 ;
 	courant->fils = NULL ;
 	courant->frere = NULL ;
-	dico->racine = courant;
-	dico->map[dico->nb_elt-1] = courant;
+	dico->map[255]->frere = courant;
+	dico->map[256] = courant;
 }
 
 dict_t dict_new(){
@@ -222,7 +222,7 @@ dict_t dict_new(){
 
 	// TODO : ajout cas speciaux
 	// EndOfMessage, ResetDictionnaire, AgrandirDictionnaire
-	//ajout_speciaux(dico);
+	ajout_speciaux(dico);
 	return dico ;
 }
 
