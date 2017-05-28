@@ -9,58 +9,85 @@ void test_IO(){
   int *lg_buf = malloc(sizeof(int)) ;
   *lg_buf = 0 ;
 
+  FILE* f = fopen("output/test.txt", "wb");
+
   printf("Source : %" PRIu8 "\n", index);  
   binarray = dec_to_binarray(index, lg);
   printf("Version binaire :\t"); fprintf_binarray(stdout, binarray, lg); printf("\n");
-  fprintf_index(stdout, buffer, lg_buf, binarray, lg);
+  fprintf_index(f, buffer, lg_buf, binarray, lg);
   fprintf(stdout, "\nContenu restant du buffer : "); fprintf_binarray(stdout, buffer, *lg_buf); printf("\n");
 
   index = 98 ;
   printf("Source : %" PRIu8 "\n", index);  
   binarray = dec_to_binarray(index, lg);
   printf("Version binaire :\t"); fprintf_binarray(stdout, binarray, lg); printf("\n");
-  fprintf_index(stdout, buffer, lg_buf, binarray, lg);
+  fprintf_index(f, buffer, lg_buf, binarray, lg);
   fprintf(stdout, "\nContenu restant du buffer : "); fprintf_binarray(stdout, buffer, *lg_buf); printf("\n");
 
   index = 99 ;
   printf("Source : %" PRIu8 "\n", index);  
   binarray = dec_to_binarray(index, lg);
   printf("Version binaire :\t"); fprintf_binarray(stdout, binarray, lg); printf("\n");
-  fprintf_index(stdout, buffer, lg_buf, binarray, lg);
+  fprintf_index(f, buffer, lg_buf, binarray, lg);
   fprintf(stdout, "\nContenu restant du buffer : "); fprintf_binarray(stdout, buffer, *lg_buf); printf("\n");
 
   index = 100 ;
   printf("Source : %" PRIu8 "\n", index);  
   binarray = dec_to_binarray(index, lg);
   printf("Version binaire :\t"); fprintf_binarray(stdout, binarray, lg); printf("\n");
-  fprintf_index(stdout, buffer, lg_buf, binarray, lg);
+  fprintf_index(f, buffer, lg_buf, binarray, lg);
   fprintf(stdout, "\nContenu restant du buffer : "); fprintf_binarray(stdout, buffer, *lg_buf); printf("\n");
 
   index = 259 ;
   printf("Source : %" PRIu8 "\n", index);  
   binarray = dec_to_binarray(index, lg);
   printf("Version binaire :\t"); fprintf_binarray(stdout, binarray, lg); printf("\n");
-  fprintf_index(stdout, buffer, lg_buf, binarray, lg);
+  fprintf_index(f, buffer, lg_buf, binarray, lg);
   fprintf(stdout, "\nContenu restant du buffer : "); fprintf_binarray(stdout, buffer, *lg_buf); printf("\n");
 
   index = 100 ;
   printf("Source : %" PRIu8 "\n", index);  
   binarray = dec_to_binarray(index, lg);
   printf("Version binaire :\t"); fprintf_binarray(stdout, binarray, lg); printf("\n");
-  fprintf_index(stdout, buffer, lg_buf, binarray, lg);
+  fprintf_index(f, buffer, lg_buf, binarray, lg);
   fprintf(stdout, "\nContenu restant du buffer : "); fprintf_binarray(stdout, buffer, *lg_buf); printf("\n");
 
   index = 256 ;
   printf("Source : %" PRIu8 "\n", index);  
   binarray = dec_to_binarray(index, lg);
   printf("Version binaire :\t"); fprintf_binarray(stdout, binarray, lg); printf("\n");
-  fprintf_index(stdout, buffer, lg_buf, binarray, lg);
+  fprintf_index(f, buffer, lg_buf, binarray, lg);
   fprintf(stdout, "\nContenu restant du buffer : "); fprintf_binarray(stdout, buffer, *lg_buf); printf("\n");
 
+  fflush_index(f, buffer, *lg_buf);
 
-  fflush_index(stdout, buffer, *lg_buf);
+  fclose(f) ;
+
+  printf("\n**********\n\n");
+
+  f = fopen("output/test.txt", "rb");
+
+  uint8_t* buffer_fread = malloc(8 * sizeof(uint8_t)) ;
+  int* buffer_fread_length = malloc(sizeof(int)) ;
+  *buffer_fread_length = 0 ;
+  uint8_t* index_fread = malloc(9 * sizeof(uint8_t)) ;
+  int index_fread_length = 9 ;
+
+
+  for (int i = 0; i < 7; i++){
+
+    // printf("On recupere %d bit(s)\n", index_fread_length);
+    fread_index(f, buffer_fread, buffer_fread_length, index_fread, index_fread_length);
+    printf("On a recupere dans index : "); fprintf_binarray(stdout, index_fread, index_fread_length);printf("\n");
+    printf("Cela donne : %hi \n", binarray_to_dec(index_fread, index_fread_length)); 
+    printf("Contenu du buffer : "); fprintf_binarray(stdout, buffer_fread, *buffer_fread_length);printf("\n");
+    printf("\n");
+  }
+
+  fclose(f);
 
 }
+
 
 
 
@@ -94,12 +121,14 @@ uint8_t* dec_to_binarray(const dict_index_t n, const int array_length){
   return  pointer;
 }
 
+
 void fprintf_binarray (FILE* f, const uint8_t *binarray, const int array_length){
 
   for (int i = 0; i < array_length; ++i){
     fprintf(f, "%" PRIu8 "",binarray[i]);
   }
 }
+
 
 dict_index_t binarray_to_dec(const uint8_t* array, const int array_length){
 
@@ -113,12 +142,10 @@ dict_index_t binarray_to_dec(const uint8_t* array, const int array_length){
 
 }
 
+
 void fprintf_index (FILE* f, uint8_t* current_buffer, int* buffer_length, const uint8_t* index, const int index_length){
 
-
-
-  // Buffer de 8 uint8_t pour fwrite
-  uint8_t* writing_buffer = malloc(8*sizeof(uint8_t)) ;
+  uint8_t* writing_buffer = malloc(8*sizeof(uint8_t)) ; // Buffer de 8 uint8_t pour fwrite
   int to_write_from_index = 8 - *buffer_length ; // Le nombre de bits a recuperer dans index et a ajouter dans buffer
   int remaining_in_index = 0 ; // Nombre de bits significatifs encore presents dans index
   int first_bit_remaining_in_index = 0 ; // numero du premier bit significatif encore present dans index
@@ -188,6 +215,7 @@ void fprintf_index (FILE* f, uint8_t* current_buffer, int* buffer_length, const 
   
 }
 
+
 void fflush_index (FILE* f, uint8_t* current_buffer, const int buffer_length){
 
   #ifdef DEBUG
@@ -212,4 +240,50 @@ void fflush_index (FILE* f, uint8_t* current_buffer, const int buffer_length){
     }
   }
 
+}
+
+
+void fread_index(FILE* f, uint8_t* current_buffer, int* buffer_length, uint8_t* index, const int index_length){
+
+  uint8_t* reading_buffer = malloc(8*sizeof(uint8_t)) ; // Buffer de 8 uint8_t pour fread
+  int bits_to_write ; // Nombre de bits restant a ecrire dans index
+
+  int written_bits = 0 ; // Nombre de bits ecrits dans index
+  int first_bit_remaining_in_reading_buffer = 1 ; // Le premier bit restant dans reading_buffer n'ayant pas ete copie dans index
+  int bits_remaining = 0 ; // Le nombre de bits restant dans reading_buffer n'ayant pas ete copies dans index
+  int written_bits_from_reading_buffer = 0 ; // Le nombre de bits ecrits dans index depuis l'octet lu et en cours de traitement 
+
+  // On recopie current_buffer dans index[0 .. buffer_length]
+  for (int i = 0; i < *buffer_length ; ++i){
+    index[i] = current_buffer[i] ;
+  }
+  written_bits = *buffer_length ;
+
+
+
+  // Tant que index n'est pas remplit 
+  while(written_bits < index_length){
+
+    bits_to_write = index_length - written_bits ;
+
+    // On recupere un octet depuis le fichier 
+    fread(reading_buffer, 1, 8, f) ; 
+
+    // On recopie cet octet dans index
+    written_bits_from_reading_buffer = 0 ;
+    first_bit_remaining_in_reading_buffer = 0 ;
+    for (int i = 0 ; i < bits_to_write && i < 8 ; i++){
+      index[written_bits + i] = reading_buffer[i] ;
+      first_bit_remaining_in_reading_buffer++ ;
+      written_bits_from_reading_buffer++ ;
+    }
+    written_bits += written_bits_from_reading_buffer ;
+  }
+
+  // On recopie le reste du dernier octet lu et on le place dans current_buffer
+  bits_remaining = 8 - first_bit_remaining_in_reading_buffer ;
+  for (int i = 0; i < bits_remaining ; ++i){
+    current_buffer[i] = reading_buffer[first_bit_remaining_in_reading_buffer + i] ;
+  }
+  *buffer_length = bits_remaining ;
 }
