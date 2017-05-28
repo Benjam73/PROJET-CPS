@@ -47,4 +47,11 @@ void fprintf_n_octets_comp(FILE* f, dict_index_t* index, int n);
  */
 uint8_t* concatenation(uint8_t* w, int wlength, uint8_t* a);
 
+
+int adapter_longueur(uint8_t* w1);
+
+int uint8_cmp(uint8_t* tab, char* tab2, int taille);
+
+dict_index_t to_index(uint8_t* tab, int taille);
+
 #endif //_STRING

@@ -45,3 +45,34 @@ uint8_t* concatenation(uint8_t* w, int wlength, uint8_t* a){
 	wa[i] = a[0];
 	return wa;
 }
+
+int adapter_longueur(uint8_t* w1){
+	int lg =0;
+	for(int i = 0; i<16; i++){
+		if(w1[i] != 0x0){
+			lg++;
+		}
+	}
+	return lg;
+}
+
+
+int uint8_cmp(uint8_t* tab, char* tab2, int taille){
+	int monbool = 1;
+	for(int i = 0; i < taille && monbool == 1; i++){
+		if(tab[i] != tab2[i]){
+			monbool = 0;
+		}
+	}
+	return !monbool;
+}
+
+dict_index_t to_index(uint8_t* tab, int taille){
+	int result = 0;
+	char tmp;
+	for(int i = 0; i < taille; i++){
+		tmp = tab[i];
+		result += atoi(&tmp);
+	}
+	return result;
+}

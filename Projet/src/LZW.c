@@ -131,15 +131,7 @@ void compression (FILE* f_input, FILE* f_output){
 
 
 
-int adapter_longueur(uint8_t* w1){
-	int lg =0;
-	for(int i = 0; i<16; i++){
-		if(w1[i] != 0x0){
-			lg++;
-		}
-	}
-	return lg;
-}
+
 
 void decompression (FILE* f_input, FILE* f_output){
 
@@ -153,7 +145,7 @@ void decompression (FILE* f_input, FILE* f_output){
 
 	uint8_t* w1 = malloc(sizeof(uint8_t)) ;
 	uint8_t* w2 = malloc(sizeof(uint8_t)) ;
-	int len_w1 = 0, len_w2 = 0;
+	int len_w1 = 0;
 
 	uint8_t a[1] ;
 
@@ -164,8 +156,8 @@ void decompression (FILE* f_input, FILE* f_output){
 	// Lecture du premier index
 	// TODO : fonction de comparaison pour tableau de uint8_t afin evite warning et atoi egalement
 	fread(tmp, 1, 1, f_input) ;
-	while(strcmp(tmp,".")) {
-		i1 = i1*10 + atoi(tmp);
+	while(uint8_cmp(tmp,".",1)) {
+		i1 = i1*10 + to_index(tmp,1);
 
 		fread(tmp, 1, 1, f_input) ;
 	}
@@ -190,8 +182,8 @@ void decompression (FILE* f_input, FILE* f_output){
 
                 // i' <- code suivant de S
 		fread(tmp, 1, 1, f_input);
-		while(strcmp(tmp,".")) {
-			i2 = i2*10 + atoi(tmp);
+		while(uint8_cmp(tmp,".",1)) {
+			i2 = i2*10 + to_index(tmp,1);
 
 			fread(tmp, 1, 1, f_input) ;
 		}
@@ -207,7 +199,7 @@ void decompression (FILE* f_input, FILE* f_output){
 				dict_rechercher_index(dico, i1, w2) ;
 				//w2[len_w2] = a[0] ; 
 			}
-			len_w2 = 1;
+			//len_w2 = 1;
                 // ecrire w' sur E 
 		//fprintf_n_octets(f_output, w2, len_w2);
 			fprintf(f_output, "%s",w2 );
