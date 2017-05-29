@@ -3,7 +3,6 @@
 
 #include "dict.h"
 #include "LZW.h"
-#include "IO.h"
 
 #define true 1
 #define false 0
@@ -21,9 +20,6 @@ int main(int argc, char *argv[]){
 
 	FILE *f_input_c, *f_output_c, *f_input_x, *f_output_x ;
 
-	#ifdef TEST_IO
-	test_IO();
-	#endif
 	
 	#ifdef TEST_CHAINE_CARAC
 	test_chaine_carac();
