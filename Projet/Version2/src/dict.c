@@ -46,7 +46,7 @@ dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict
 
 dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* resultat, int* taille_resultat){
 	int i = 0;
-	int j = 0;
+	int j = 1;
 
 
 
@@ -68,22 +68,22 @@ dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* res
 		resultat[0] = noeud_courant->sym;
 		while (noeud_courant->pere != NULL) {
 			noeud_courant = noeud_courant->pere;
-			//resultat[*taille_resultat - (j + 1)] = noeud_courant->sym;
-			resultat[(j + 1)] = noeud_courant->sym;
+			resultat[j] = noeud_courant->sym;
+			// resultat[(j + 1)] = noeud_courant->sym;
 			j++;
 		}
 		
 		//(*taille_resultat)++;
 
 		// On retourne le mot   
-		// if(j != 1){
-		// 	uint8_t temp;
-		// 	for (int k = 0; k < j/2; k++) {
-		// 		temp = resultat[k];
-		// 		resultat[k] = resultat[j-k-1];
-		// 		resultat[j-k-1] = temp;
-		// 	}
-		// }
+		if(j != 1){
+			uint8_t temp;
+			for (int k = 0; k < j/2; k++) {
+				temp = resultat[k];
+				resultat[k] = resultat[j-k-1];
+				resultat[j-k-1] = temp;
+			}
+		}
 	}
 	// Sinon on revoie une erreur
 	else{
@@ -219,7 +219,7 @@ void ajout_speciaux(dict_t dico){
 	courant->frere = NULL ;
 	dico->map[EOM - 1].noeud->frere = courant;
 	dico->map[EOM].noeud = courant;
-	dico->map[EOM].taille = 9;
+	dico->map[EOM].taille = 1;
 
 	//AgrandirDictionnaire = 257
 	dico->nb_elt = dico->nb_elt + 1;
@@ -229,7 +229,7 @@ void ajout_speciaux(dict_t dico){
 	courant->frere = NULL ;
 	dico->map[AD - 1].noeud->frere = courant;
 	dico->map[AD].noeud = courant;
-	dico->map[EOM].taille = 9;
+	dico->map[EOM].taille = 1;
 
 	//ReinitialiserDictionnaire = 258
 	dico->nb_elt = dico->nb_elt + 1;
@@ -239,7 +239,7 @@ void ajout_speciaux(dict_t dico){
 	courant->frere = NULL ;
 	dico->map[RD - 1].noeud->frere = courant;
 	dico->map[RD].noeud = courant;
-	dico->map[RD].taille = 9;
+	dico->map[RD].taille = 1;
 
 }
 
