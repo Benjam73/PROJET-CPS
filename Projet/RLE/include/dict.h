@@ -46,7 +46,7 @@ typedef enum {
 #define DICT_CHAR_NOCHAR -2		// Valeur indefinie
 
 // TAILLE_MAX = 2^15
-#define TAILLE_MAX 32767
+#define TAILLE_MAX 32768
 
 /**
  * \struct _dict
@@ -89,7 +89,7 @@ dict_t dict_new();
  */
 
  
-void dict_reinit(dict_t dico);
+dict_error_t dict_reinit(dict_t dico);
 
 /**
  * @brief      Ajoute la chaine de caractere mot au dictionnaire dico

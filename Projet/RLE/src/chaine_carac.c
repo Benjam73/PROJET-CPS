@@ -1,7 +1,5 @@
 #include "chaine_carac.h"
 
-
-//Procedure de test sur les fonction de chaine_carac
 void test_chaine_carac(){
 
 	uint8_t *word = malloc(sizeof(uint8_t));
@@ -39,7 +37,7 @@ void fprintf_n_octets_comp(FILE* f, dict_index_t* index, int n){
 }
 
 uint8_t* concatenation(uint8_t* w, int wlength, uint8_t* a){
-	uint8_t* wa = malloc((wlength + 1) *sizeof(uint8_t));
+	uint8_t* wa = malloc(sizeof(uint8_t));
 	int i;
 	for (i = 0; i < wlength; i++){
 		wa[i] = w[i];
@@ -77,18 +75,4 @@ dict_index_t to_index(uint8_t* tab, int taille){
 		result += atoi(&tmp);
 	}
 	return result;
-}
-
-uint8_t* init_vect(){
-	uint8_t* tab = malloc(sizeof(uint8_t));
-	while(adapter_longueur(tab) != 0){
-		tab = malloc(sizeof(uint8_t));
-	}
-	return tab;
-}
-
-void fflush_vect(uint8_t* tab, int taille){
-	for(int i = 0; i < taille; i++){
-		tab[i] = 0x0;
-	}
 }

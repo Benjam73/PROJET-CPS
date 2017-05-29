@@ -7,8 +7,8 @@
  * 
  */
 
-#ifndef _CHAINE
-#define _CHAINE
+#ifndef _STRING
+#define _STRING
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -79,20 +79,4 @@ int uint8_cmp(uint8_t* tab, char* tab2, int taille);
  */
 dict_index_t to_index(uint8_t* tab, int taille);
 
-/**
- * @brief      Fonction permettant d'allouer un vecteur vide en memoire
- *
- * @return     Le vecteur allouer en mémoire
- */
-uint8_t* init_vect();
-
-
-/**
- * @brief      Fonction permettant de vider un vecteur
- *
- * @param      tab     Le vecteur a vider
- * @param[in]  taille  La taille du vecteur
- */
-void fflush_vect(uint8_t* tab, int taille);
-
-#endif //_CHAINE
+#endif //_STRING
