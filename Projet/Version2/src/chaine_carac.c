@@ -16,19 +16,17 @@ void test_chaine_carac(){
 }
 
 void fprintf_n_octets(FILE* f, uint8_t* word, int n){
-	for (int i = 0; i < n; i++){
-		fprintf(f, "%" PRIu8 ".", word[i]);  
-		// #ifdef DEBUG
-		// fprintf(stdout, " -> On ecrit\n");
-		// #endif
-	}
-	// #ifdef DEBUG
-	// fprintf(f, " \"");
 	// for (int i = 0; i < n; i++){
-	// 	fprintf(f, "%c", word[i]);  
+	// 	fprintf(f, "%" PRIu8 ".", word[i]);
+	// 	// #ifdef DEBUG
+	// 	// fprintf(stdout, " -> On ecrit\n");
+	// 	// #endif
 	// }
-	// fprintf(f, "\"");
-	// #endif
+	// fprintf(f, " \"");
+	for (int i = 0; i < n; i++){
+		fprintf(f, "%c", word[i]);  
+	}
+	// fprintf(f, "\" ");
 	fflush(f);
 }
 

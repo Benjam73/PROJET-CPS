@@ -15,6 +15,8 @@ uint8_t* init_vect(){
 
 void compression (FILE* f_input, FILE* f_output){
 
+	bool EOM_sent = false ;
+
 	dict_t dico ;
 
 	uint8_t* a = malloc(sizeof(uint8_t));
@@ -47,7 +49,7 @@ void compression (FILE* f_input, FILE* f_output){
 
 
     // tant que la fin de E n'est pas atteinte
-	while (!feof(f_input)) {
+	while (!feof(f_input) && !EOM_sent) {
 
         // a <- octet suivant de E
         #ifdef DEBUG
@@ -108,6 +110,17 @@ void compression (FILE* f_input, FILE* f_output){
 			#endif
 
             // D <- D U {w.a}
+            if(dico->nb_elt >= (1 << taille_codage)){
+    	      	binarray = dec_to_binarray(AD, taille_codage);
+				fprintf_index(f_output, buffer, lg_buf, binarray, taille_codage);
+				taille_codage++;
+
+            } 
+            else if (dico->nb_elt >= TAILLE_MAX){
+            	binarray = dec_to_binarray(RD, taille_codage);
+				fprintf_index(f_output, buffer, lg_buf, binarray, taille_codage);
+				dict_reinit(dico);
+            }
 			dict_insert(dico,concatenation(w, wlength, a), wlength+1);
 			
 			w = malloc(sizeof(uint8_t));
@@ -117,20 +130,10 @@ void compression (FILE* f_input, FILE* f_output){
 		#ifdef DEBUG
 		printf("\n");
 		#endif
+			//dict_print(dico);
 	}
 
-    // Ecrire sur S l'index associé à w
-	// #ifdef DEBUG
-	// printf("Ecrire sur S l'index associé à w\n");
-	// #endif
-	// dict_rechercher_mot(dico, w, wlength, &index, &taille);
-	// /* On place index dans un tableau binaire */
-	// binarray = dec_to_binarray(index, taille_codage);
-	//  On ecrit cette representation binaire dans f_output 
-	// fprintf_index(f_output, buffer, lg_buf, binarray, taille_codage);
-	// #ifdef DEBUG
-	// fprintf(stdout, "Contenu restant du buffer : "); fprintf_binarray(stdout, buffer, *lg_buf); printf("\n");
-	// #endif
+
 
 	// AjoutEOF
 	#ifdef DEBUG
@@ -147,7 +150,6 @@ void compression (FILE* f_input, FILE* f_output){
 
 
 	fflush_index(f_output, buffer, *lg_buf);
-
 
 }
 
@@ -185,6 +187,9 @@ void decompression (FILE* f_input, FILE* f_output){
 	// i1 <- 1er code de S
 	fread_index(f_input, current_buffer, buffer_length, binarray, binarray_length);
 	i1 = binarray_to_dec(binarray, binarray_length);
+	#ifdef DEBUG
+    fprintf(stdout, "Ca donne : "); fprintf_binarray(stdout, binarray, binarray_length); printf("\n");
+	#endif
 
 	// a <- chaine d'index i dans D
 	dict_rechercher_index(dico, i1, a, len_a);
@@ -196,7 +201,7 @@ void decompression (FILE* f_input, FILE* f_output){
 
     // ecrire w sur E
 	#ifdef DEBUG
-	printf("On ecrit ");fprintf_n_octets(stdout, w1, *len_w1);printf("\n");
+	printf("On ecrit ");fprintf_n_octets(stdout, w1, *len_w1);
 	#endif
 	fprintf_n_octets(f_output, w1, *len_w1);
 	
@@ -207,39 +212,46 @@ void decompression (FILE* f_input, FILE* f_output){
 	while (!feof(f_input) && !EOM_received){
 
         // i2 <- code suivant de S
+        #ifdef DEBUG
+        fprintf(stdout, "\nContenu restant du buffer : "); fprintf_binarray(stdout, current_buffer, *buffer_length); printf("\n");
+		#endif
 		fread_index(f_input, current_buffer, buffer_length, binarray, binarray_length);
 		i2 = binarray_to_dec(binarray, binarray_length);
+		#ifdef DEBUG
+        fprintf(stdout, "Ca donne : "); fprintf_binarray(stdout, binarray, binarray_length); printf("\n");
+		#endif
+
 
 		switch (i2){
 			case EOM : 
 				EOM_received = true ;
 				break;
 			case AD :
+				binarray_length++;
 				// TODO : implementer AgrandirDictionnaire
-				/* Code */
 			break;
 			case RD:
 				// TODO : implementer ReinitialiserDictionnaire
-				/* Code */
+				dict_reinit(dico);
 			break;
 			default:
 			
 				#ifdef DEBUG
-				printf("i1 = %hi\ti2 = %hi\n", i1, i2);
+				printf("i1 = %hi, i2 = %hi\n", i1, i2);
 				#endif
 
 				// Si i1 appartient a D alors
-				if (dict_rechercher_index(dico, i1, chaine_temp, len_chaine_temp) == DICT_NOERROR){
+				if (dict_rechercher_index(dico, i2, chaine_temp, len_chaine_temp) == DICT_NOERROR){
 					// w2 <- chaine d'index i2 dans D
 					#ifdef DEBUG
-					printf("NON\n");
+					printf("%hi trouve dans le dictionnaire\n", i2);
 					#endif
 					dict_rechercher_index(dico, i2, w2, len_w2);
 				}
 				// Si i1 n'appartient pas a D alors 
 				else{
 					#ifdef DEBUG
-					printf("OUI\n");
+					printf("%hi NON trouve dans le dictionnaire\n", i1);
 					#endif
 					// w2 <- chaîne d'index i1 dans D
 					dict_rechercher_index(dico, i1, w2, len_w2);
@@ -260,6 +272,11 @@ void decompression (FILE* f_input, FILE* f_output){
 				a[0] = w2[0] ;
 
 	            // D <- D U {w.a}
+		        #ifdef DEBUG
+	            printf("On ajoute ");fprintf_n_octets(stdout, concatenation(w1, *len_w1, a), (*len_w1) + 1);printf("\n");
+	            #endif
+
+
 				dict_insert(dico, concatenation(w1, *len_w1, a), (*len_w1) + 1);
 	            
 	            // i1 <- i2
@@ -270,6 +287,12 @@ void decompression (FILE* f_input, FILE* f_output){
 				
 			
 		}
+
+		#ifdef DEBUG
+		if (EOM_received){
+			printf("On a lu EOM\n");
+		}
+		#endif 
 	}
 	//end(FIXME : A TERMINER D'ADAPTER AU BINAIRE)
 }

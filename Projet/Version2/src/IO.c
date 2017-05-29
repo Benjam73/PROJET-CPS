@@ -249,10 +249,10 @@ void fprintf_index (FILE* f, uint8_t* current_buffer, int* buffer_length, const 
 
     // On ecrit ce buffer
     #ifdef DEBUG
-    fprintf(stdout, "+ On va ecrire :\t"); fprintf_binarray(stdout, writing_buffer, 8); fprintf(stdout, "\n");
+    fprintf(stdout, "On va ecrire :\t"); fprintf_binarray(stdout, writing_buffer, 8); fprintf(stdout, "\n");
     #endif
     writing_byte = binarray_to_byte(writing_buffer);
-    if (fwrite(writing_buffer, 1, 1, f) < 1){
+    if (fwrite(writing_byte, 1, 1, f) < 1){
       #ifdef DEBUG
       fprintf(stdout, "Erreur d'ecriture\n");
       #endif
@@ -331,7 +331,10 @@ void fread_index(FILE* f, uint8_t* current_buffer, int* buffer_length, uint8_t* 
     bits_to_write = index_length - written_bits ;
 
     // On recupere un octet depuis le fichier 
-    fread(reading_byte, 1, 1, f) ;
+    if(fread(reading_byte, 1, 1, f) == 0){
+      printf("ERREUR LECTURE\n");
+      exit(EXIT_FAILURE);
+    }
     reading_buffer = byte_to_binarray(reading_byte);
 
     #ifdef DEBUG
