@@ -7,8 +7,8 @@
  * 
  */
 
-#ifndef _STRING
-#define _STRING
+#ifndef _CHAINE
+#define _CHAINE
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -95,4 +95,4 @@ uint8_t* init_vect();
  */
 void fflush_vect(uint8_t* tab, int taille);
 
-#endif //_STRING
+#endif //_CHAINE
