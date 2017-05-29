@@ -52,7 +52,7 @@ void compression (FILE* f_input, FILE* f_output){
 		}
 	}
     
-    // ecrire sur S l'index associé à w
+    // ecrire sur S l'index associe a w
 	dict_rechercher_mot(dico, w, wlength, &index, &taille);
 	// Ajout EOF
 	index = 256;

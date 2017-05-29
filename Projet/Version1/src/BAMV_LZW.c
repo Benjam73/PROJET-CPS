@@ -10,8 +10,8 @@
 
 
 // Retourne : 
-//   0 si tout s'est bien passé
-//   -1 si l'appel n'etait pas correct ou que l'utilisateur a demandé de l'aide
+//   0 si tout s'est bien passe
+//   -1 si l'appel n'etait pas correct ou que l'utilisateur a demande de l'aide
 //   1 si un des arguments n'etait pas un fichier valable
 int main(int argc, char *argv[]){
 

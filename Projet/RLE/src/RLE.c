@@ -14,15 +14,15 @@ void rle (FILE* f_input, FILE* f_output){
 			cpt++;
 		}
 		else{
-            // Si le compteur est supérieur à 1 alors il y a une répétition du char compare.
+            // Si le compteur est superieur a 1 alors il y a une repetition du char compare.
 			if (cpt>1){
 				fprintf(f_output,"%d", cpt);
 				fprintf(f_output,"%c", compare);
-			}else{ // Sinon il n'y a pas de répétion donc on affiche que le char.
+			}else{ // Sinon il n'y a pas de repetion donc on affiche que le char.
 				fprintf(f_output,"%c", compare);
 			}
 
-            // Permettant de mettre un point entre chaque couple (int, char), sert alors de séparateur
+            // Permettant de mettre un point entre chaque couple (int, char), sert alors de separateur
 			fprintf(f_output, ".");
 			compare = courant;
 			cpt = 1;
@@ -36,32 +36,32 @@ void elr (FILE* f_input, FILE* f_output){
 
     while (!feof(f_input)) {
 
-        // Consomme et met dans une variable l'entier, le caractère et consomme juste le point.
+        // Consomme et met dans une variable l'entier, le caractere et consomme juste le point.
         int scan_int = fscanf(f_input,"%d", &entier);
        	fscanf(f_input,"%c", &carac);
         fscanf(f_input,".");
 
-        // Si le caractère est un point c'est que il a une entrée : .123. Ici on doit alors afficher 12 fois le chiffre 3.
+        // Si le caractere est un point c'est qu'il a une entree : .123. Ici on doit alors afficher 12 fois le chiffre 3.
         if (carac == '.'){
-            // Si l'entier est inférieur à 10 alors on a juste à mettre le chiffre dans le fichier.
+            // Si l'entier est inferieur a 10 alors on a juste a mettre le chiffre dans le fichier.
             if (entier<10){
                 fprintf(f_output, "%d", entier);
-            }else{ // Sinon C'est qu'il y a une répétion d'un chiffre
-                // Récupère l'unité de l'entier qui est l'entier a répéter
+            }else{ // Sinon c'est qu'il y a une repetion d'un chiffre
+                // Recupere l'unite de l'entier qui est l'entier a repeter
                 int unite = entier%10;
-                // Récupère le nombre de fois qu'il faut répéter l'entier unite
+                // Recupere le nombre de fois qu'il faut repeter l'entier unite
                 int new_cpt = (entier-unite)/10;
                 while(new_cpt != 0){
-                    // Met unite le nombre de fois nécessaire
+                    // Met unite le nombre de fois necessaire
                     fprintf(f_output, "%d", unite);
                     new_cpt--;
                 }
             }
         }else{
-            // Si le scanf récupérant l'entier n'a pas réussi à trouver d'entier alors on met dans le fichier le caractère une seule fois car il n'y a pas de répétition de celui-ci
+            // Si le scanf recuperant l'entier n'a pas reussi a trouver d'entier alors on met dans le fichier le caractere une seule fois car il n'y a pas de repetition de celui-ci
             if (scan_int == 0){
                 fprintf(f_output, "%c", carac);
-            }else{ // Sinon on met dans le fichier f_output le caractère le nombre de fois donné par l'entier
+            }else{ // Sinon on met dans le fichier f_output le caractere le nombre de fois donne par l'entier
                 while(entier != 0){
                     fprintf(f_output, "%c", carac);
                     entier--;

@@ -137,7 +137,7 @@ dict_error_t dict_insert(dict_t dico, uint8_t* mot, int taille_mot){
 	noeud_frere = NULL;
 	int taille;
 
-	//On cherche premiere si le mot est present ou non
+	//On cherche premierement si le mot est present ou non
 	if (dict_rechercher_mot(dico, mot, taille_mot, &index, &taille) == DICT_NOTFOUND){
 		while (index_caractere_courant < taille_mot){
 			//On recherche successivement le caractere courant dans les niveaux de l'arbre
@@ -186,7 +186,7 @@ void ajout_premier(dict_t dico){
 	dico->map[dico->nb_elt-1] = courant;
 }
 
-//Permet d'ajouter les symbole spéciaux dans le dictionnaire
+//Permet d'ajouter les symbole speciaux dans le dictionnaire
 void ajout_speciaux(dict_t dico){
 
 	noeud_t courant = malloc(sizeof(struct _node)) ;
