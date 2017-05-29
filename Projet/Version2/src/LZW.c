@@ -154,21 +154,27 @@ void compression (FILE* f_input, FILE* f_output){
 
 void decompression (FILE* f_input, FILE* f_output){
 
+	bool EOM_received = false ;
+
 	dict_t dico ;
 
 	dict_index_t i1 = 0; 
 	dict_index_t i2 = 0;
 
-	uint8_t* w1 = malloc(N * sizeof(uint8_t));
-	uint8_t* w2 = malloc(N * sizeof(uint8_t));
+	uint8_t* w1 = malloc(8 * sizeof(uint8_t)); // 8 car au debut vaut le mot de premier index lu -> un seul caractere
+	uint8_t* w2 = malloc(16 * sizeof(uint8_t)); // 16 car vaut la premiere fois au plus une chaine de deux carac si les deux premiers carac du fichier a compresser sont identiques 
+	uint8_t* chaine_temp = malloc(8 * sizeof(uint8_t)); // On le malloc a nouveau dans dict_rechercher_index 
 
-	int len_w1 = 0;
-	int len_w2 = 0;
+
+	int* len_w1 = malloc(sizeof(int)); *len_w1 = 0;
+	int* len_w2 = malloc(sizeof(int)); *len_w2 = 0;
+	int* len_a = malloc(sizeof(int)); *len_a = 0;
+	int* len_chaine_temp = malloc(sizeof(int)); *len_chaine_temp = 0;
 
 	uint8_t* a = malloc(sizeof(uint8_t));
 
-	uint8_t* binarray = malloc(8 * sizeof(uint8_t)); // Pour lire des 
-
+	uint8_t* binarray = malloc(8 * sizeof(uint8_t)); // Pour lire des representations binaires d'index
+	int binarray_length = 9 ;
 
 	uint8_t* current_buffer = malloc(8 * sizeof(uint8_t));
 	int* buffer_length = malloc(sizeof(int)); *buffer_length = 0 ;
@@ -176,69 +182,77 @@ void decompression (FILE* f_input, FILE* f_output){
     // D <- ens. de toutes les chaînes de longueur 1
 	dico = dict_new();
 
-	// i <- 1er code de S
-	fread(binarray, 1, 1, f_input);
-	binarray_to_dec(binarray, 8);
+	// i1 <- 1er code de S
+	fread_index(f_input, current_buffer, buffer_length, binarray, binarray_length);
+	i1 = binarray_to_dec(binarray, binarray_length);
 
 	// a <- chaine d'index i dans D
-	dict_rechercher_index(dico, i1, a);
+	dict_rechercher_index(dico, i1, a, len_a);
 
-    // w <- [a]
+    // w1 <- [a]
 	w1[0] = *a ;
-	len_w1 = 1 ;
+	*len_w1 = 1 ;
 
 
     // ecrire w sur E
-	fprintf_index (f_output, current_buffer, buffer_length, w1, len_w1);
+	fprintf_index (f_output, current_buffer, buffer_length, w1, *len_w1);
 
 
 	//FIXME : A TERMINER D'ADAPTER AU BINAIRE
 
     // tant que la fin de S n'est pas atteinte
-	while(!feof(f_input)){
+	while (!feof(f_input) && !EOM_received){
 
-        // i' <- code suivant de S
-		fread(tmp, 1, 1, f_input);
-		while(uint8_cmp(tmp,".",1)) {
-			i2 = i2*10 + to_index(tmp,1);
+        // i2 <- code suivant de S
+		fread_index(f_input, current_buffer, buffer_length, binarray, binarray_length);
+		i2 = binarray_to_dec(binarray, binarray_length);
 
-			fread(tmp, 1, 1, f_input) ;
-		}
-
-        // On place la chaine d'index i2 dans w2
-        // Si on a une erreur, c'est que i2 n'est pas dans dico
-		if(i2 == 256){
-			fprintf(f_output, "EOF" );
-
+		switch (i2){
+			case EOM : 
+				EOM_received = true ;
+				break;
+			case AD :
+				// TODO : implementer AgrandirDictionnaire
+				/* Code */
 			break;
+			case RD:
+				// TODO : implementer ReinitialiserDictionnaire
+				/* Code */
+			break;
+			default:
+			
+				// Si i1 appartient a D alors
+				if (dict_rechercher_index(dico, i1, chaine_temp, len_chaine_temp) == DICT_NOERROR){
+					// w2 <- chaine d'index i2 dans D
+					dict_rechercher_index(dico, i2, w2, len_w2);
+				}
+				// Si i1 n'appartient pas a D alors 
+				else{
+					// w2 <- chaîne d'index i1 dans D
+					dict_rechercher_index(dico, i1, w2, len_w2);
+					// w2 <- w2.a
+					w2 = concatenation(w2, *len_w2, a);
+					len_w2++;
+				}
 
-		} else {
-			if (dict_rechercher_index(dico, i2, w2) != DICT_NOERROR){
-				dict_rechercher_index(dico, i1, w2) ;
-				//w2[len_w2] = a[0] ; 
-			}
-			//len_w2 = 1;
-            // ecrire w' sur E 
-			//fprintf_n_octets(f_output, w2, len_w2);
-			fprintf(f_output, "%s",w2 );
-			//fprintf(f_output, ".");
 
-            // a <- 1er octet de w' 
-			a[0] = w2[0] ;
+	            // ecrire w2 sur E 
+				fprintf_n_octets(f_output, w2, *len_w2);
 
-            // D <- D U {w.a}
-			dict_insert(dico, concatenation(w1, len_w1, a), len_w1+1);
-            // i <- i'
-			i1 = i2 ;
-			i2 = 0;
-			w1 = init_vect();
 
-			*w1 = *a;
-            // w <- chaine d'index i dans D
-			dict_rechercher_index(dico, i1, w1);
-			len_w1 = adapter_longueur(w1);
-			w2 = init_vect();
+	            // a <- 1er octet de w' 
+				a[0] = w2[0] ;
 
+	            // D <- D U {w.a}
+				dict_insert(dico, concatenation(w1, *len_w1, a), (*len_w1) + 1);
+	            
+	            // i1 <- i2
+				i1 = i2 ;
+
+	            // w <- chaine d'index i dans D
+	            dict_rechercher_index(dico, i1, w1, len_w1);
+				
+			
 		}
 	}
 	//end(FIXME : A TERMINER D'ADAPTER AU BINAIRE)

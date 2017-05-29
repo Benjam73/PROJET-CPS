@@ -14,6 +14,9 @@
 #include <stdio.h>
 #include <string.h>
  
+typedef int bool ;
+#define true 1
+#define false 0
 
 typedef short int dict_index_t;  	// le type index
 typedef long dict_char_t;          // le type valeur/caractere
@@ -48,6 +51,11 @@ typedef enum {
 // TAILLE_MAX = 2^15
 #define TAILLE_MAX 32768
 
+typedef struct {
+  noeud_t noeud;
+  int taille ;
+}hashmap;
+
 /**
  * \struct _dict
  * \brief Structure caracterisant un dictionnaire, contient le nombre d'element de celui-ci, un pointeur vers _node et un tableau de pointeur de _node
@@ -55,7 +63,7 @@ typedef enum {
 struct _dict{
   dict_index_t nb_elt ;
   noeud_t racine ;
-  noeud_t map[TAILLE_MAX] ;
+  hashmap map[TAILLE_MAX] ;
 };
 
 /**
@@ -130,7 +138,7 @@ dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict
  *
  * @return     Le code d'erreur correspondant suivant l'execution de la fonction
  */
-dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* resultat);
+dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* resultat, int* taille_resultat);
 
 
 

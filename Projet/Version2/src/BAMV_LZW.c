@@ -5,8 +5,6 @@
 #include "LZW.h"
 
 
-#define true 1
-#define false 0
 
 
 
@@ -35,7 +33,7 @@ int main(int argc, char *argv[]){
 		}
 	}
 
-	if(argc < 3 || argc > 5 || argument_aide){
+	if(argc < 3 || argc > 7 || argument_aide){
 		fprintf(stdout, "%s [-c fichier_entree ficher_sortie] [-x fichier_entree ficher_sortie]\n", argv[0]);
 		fprintf(stdout, "Arguments : \n\t -c : compression\n\t -x : decompression\n");
 		return 1 ;
