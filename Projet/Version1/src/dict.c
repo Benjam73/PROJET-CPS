@@ -102,6 +102,10 @@ dict_error_t ajouter_dans_ligne(dict_t dico, noeud_t pere, noeud_t frere, uint8_
 
 	noeud_t courant = malloc(sizeof(struct _node)) ;
 
+	if(dico->nb_elt == TAILLE_MAX - 3){
+		dict_reinit(dico);
+	}
+
 	dico->nb_elt = dico->nb_elt + 1;
 	if(frere != NULL){
 		frere->frere = courant ;
@@ -198,6 +202,16 @@ void ajout_speciaux(dict_t dico){
 	courant->frere = NULL ;
 	dico->map[255]->frere = courant;
 	dico->map[256] = courant;
+
+	//AgrandireDico = 257
+	dico->nb_elt = dico->nb_elt + 1;
+
+	courant->sym = ' ';
+	courant->code = dico->nb_elt-1 ;
+	courant->fils = NULL ;
+	courant->frere = NULL ;
+	dico->map[256]->frere = courant;
+	dico->map[257] = courant;
 }
 
 dict_t dict_new(){
@@ -227,14 +241,13 @@ dict_t dict_new(){
 }
 
 
+void dict_reinit(dict_t dico){
 
-dict_error_t dict_reinit(dict_t dico){
 
-	for(int i=256; i<TAILLE_MAX; i++){
+	for(int i = 259; i < dico->nb_elt; i++){
 		free(dico->map[i]);
-		dico->map[i] = NULL;
 	}
+	dico->nb_elt = 258;
 
-	return DICT_NOERROR;
 
 }

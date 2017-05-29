@@ -95,7 +95,7 @@ void elr (FILE* f_input, FILE* f_output){
 
     while (!feof(f_input)) {
         int scan_int = fscanf(f_input,"%d", &entier);
-        int scan_carac = fscanf(f_input,"%c", &carac);
+       	fscanf(f_input,"%c", &carac);
         fscanf(f_input,".");
         // printf("plop\n");
         if (carac == '.'){
@@ -105,7 +105,7 @@ void elr (FILE* f_input, FILE* f_output){
                 int new_entier = entier%10;
                 int new_cpt = (entier-new_entier)/10;
                 while(new_cpt != 0){
-                    printf("%d\n",new_entier);
+                    //printf("%d\n",new_entier);
                     fprintf(f_output, "%d", new_entier);
                     new_cpt--;
                 }
@@ -115,7 +115,7 @@ void elr (FILE* f_input, FILE* f_output){
                 // printf("bla\n");
                 fprintf(f_output, "%c", carac);
             }else{
-                printf("%d\n", entier);
+                //printf("%d\n", entier);
                 while(entier != 0){
                     // printf("%c\n",carac);
                     fprintf(f_output, "%c", carac);
@@ -126,41 +126,6 @@ void elr (FILE* f_input, FILE* f_output){
     }
 }
 
-// void elr (FILE* f_input, FILE* f_output){
-// 	char carac;
-// 	char courant;
-// 	char tempo = 0;
-// 	char cpttemp;
-// 	int cptres = 0;
-
-// 	//fread(tmp, 1, 1, f_input);
-
-// 	int cpt = 0;
-// 	while (!feof(f_input)) {
-// 		cpt = 0;
-// 		fscanf(f_input,"%c", courant);
-// 		//printf("%d",uint8_cmp(tmp,".",1));
-// 		while(courant != '.') {
-// 			printf("while2\n");
-// 			cpttemp[cpt] = courant;
-// 			cpt++;
-// 			carac = courant;
-// 			fscanf(f_input,"%c", courant);
-// 		}
-// 		for (int i = 0 ; cpt > i; i++ ){
-// 			tempo = cpttemp[i];
-// 			cptres = cptres * 10 + to_int(&tempo, 1);
-// 			printf("for1\n");
-
-
-// 		}
-// 		for (; cptres > 0 ; cptres --){
-// 			fprintf_n_octets(f_output,carac, 1);
-// 			printf("for2\n");
-// 		}
-// 		// printf("while1\n");
-// 	}
-// }
 
 int main(int argc, char *argv[]){
 

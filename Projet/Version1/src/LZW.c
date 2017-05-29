@@ -10,7 +10,11 @@ uint8_t* init_vect(){
 	return tab;
 }
 
-
+void fflush_vect(uint8_t* tab, int taille){
+	for(int i = 0; i < taille; i++){
+		tab[i] = 0x0;
+	}
+}
 
 
 void compression (FILE* f_input, FILE* f_output){
@@ -70,6 +74,7 @@ void compression (FILE* f_input, FILE* f_output){
 	taille = 1;
 	fprintf_n_octets_comp(f_output, &index, taille);
 	fprintf(f_output, ".");
+
 
 }
 
