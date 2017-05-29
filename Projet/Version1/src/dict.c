@@ -48,13 +48,14 @@ dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* res
 	int i = 0;
 	int j = 1;
 
+	//On cherche le noeud ayant le code correspondant a l'index grace a la map
 	for ( i = 0; i < dico->nb_elt && dico->map[i]->code != index; i++) {
 	}
-        // printf("Valeur du resultat : %s \n",resultat);
+	//On verifie que l'on a bien trouver le noeud correspodnant
 	if ( i < dico->nb_elt && dico->map[i]->code == index) {
-       // printf("Valeur du resultat : %c \n",resultat[1]);
 		noeud_t noeud_courant = dico->map[i];
 		resultat[0] = noeud_courant->sym;
+		//On remonte l'arbre grace au noeud pere jusqu'a arriver a la fin du mot
 		while (noeud_courant->pere != NULL) {
 			noeud_courant = noeud_courant->pere;
 			resultat[j] = noeud_courant->sym;
@@ -120,10 +121,6 @@ dict_error_t ajouter_dans_ligne(dict_t dico, noeud_t pere, noeud_t frere, uint8_
 	}
 	dico->map[dico->nb_elt-1] = courant;
 
- 	//printf("valeur de map[%d] = %d \n",dico->nb_elt-1,dico->map[dico->nb_elt-1]->code);
-	//printf(" valeur de map de 0 : %d \n ",dico->map[0]->code);
-
-
 	return DICT_NOERROR ;
 }
 
@@ -140,9 +137,10 @@ dict_error_t dict_insert(dict_t dico, uint8_t* mot, int taille_mot){
 	noeud_frere = NULL;
 	int taille;
 
-
+	//On cherche premiere si le mot est present ou non
 	if (dict_rechercher_mot(dico, mot, taille_mot, &index, &taille) == DICT_NOTFOUND){
 		while (index_caractere_courant < taille_mot){
+			//On recherche successivement le caractere courant dans les niveaux de l'arbre
 			noeud_courant = rechercher_dans_ligne(ligne_courante, mot[index_caractere_courant], &noeud_frere);
 
 			if (noeud_courant != NULL){
@@ -151,6 +149,7 @@ dict_error_t dict_insert(dict_t dico, uint8_t* mot, int taille_mot){
 				index_caractere_courant++;
 			}
 			else{
+				//On ajoute alors la derniere lettre du mot que l'on veux ajouter a la bonne place
 				ajouter_dans_ligne(dico, noeud_pere, noeud_frere, mot[index_caractere_courant]);
 				return DICT_ADDED;
 			}
@@ -165,12 +164,10 @@ dict_error_t dict_insert(dict_t dico, uint8_t* mot, int taille_mot){
 void dict_print (dict_t dico){
 
 	uint8_t* mot_courant = malloc(sizeof(uint8_t)) ;
-        // printf("Mot courant : %s\n", i, mot_courant);
 
 	for (int i = 0; i < dico->nb_elt; i++){
 		dict_rechercher_index(dico, i, mot_courant);
 		printf("Code : %d \t Mot courant : %s\n", i, mot_courant);
-		// printf("Code : %d \t Mot courant : %c\n", i, mot_courant[1]);
 	}
 
 }
@@ -189,6 +186,7 @@ void ajout_premier(dict_t dico){
 	dico->map[dico->nb_elt-1] = courant;
 }
 
+//Permet d'ajouter les symbole spéciaux dans le dictionnaire
 void ajout_speciaux(dict_t dico){
 
 	noeud_t courant = malloc(sizeof(struct _node)) ;
@@ -234,7 +232,7 @@ dict_t dict_new(){
 	}
 
 
-	// TODO : ajout cas speciaux
+	// Ajout cas speciaux
 	// EndOfMessage, ResetDictionnaire, AgrandirDictionnaire
 	ajout_speciaux(dico);
 	return dico ;
@@ -243,7 +241,7 @@ dict_t dict_new(){
 
 void dict_reinit(dict_t dico){
 
-
+	//On libere toutes les noeuds sauf ceux de longueur 1
 	for(int i = 259; i < dico->nb_elt; i++){
 		free(dico->map[i]);
 	}

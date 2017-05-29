@@ -1,5 +1,7 @@
 #include "chaine_carac.h"
 
+
+//Procedure de test sur les fonction de chaine_carac
 void test_chaine_carac(){
 
 	uint8_t *word = malloc(sizeof(uint8_t));
