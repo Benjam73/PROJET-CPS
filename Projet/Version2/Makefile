@@ -12,7 +12,7 @@ EXEC=BAMV_LZW
 CFLAGS=-Iinclude/ -Wall -g
 DFLAGS+= -DDEBUG
 #DFLAGS+= -DTEST_CHAINE_CARAC
-DFLAGS+= -DTEST_IO
+#DFLAGS+= -DTEST_IO
 
 
 ## Zone de traitement des noms fichiers bruts (ajout de préfixes, suffixes, gestion de l'emplacement)

@@ -1,9 +1,10 @@
 #include "IO.h"
 
 void test_IO(){
-  dict_index_t index = 97 ;
+  dict_index_t index ;
+  
   int lg = 9 ;
-  uint8_t *binarray ;  
+  uint8_t *binarray = malloc(8 * sizeof(uint8_t));
   
   uint8_t *buffer = malloc(8 * sizeof(uint8_t));
   int *lg_buf = malloc(sizeof(int)) ;
@@ -11,6 +12,7 @@ void test_IO(){
 
   FILE* f = fopen("output/test.txt", "wb");
 
+  index = 97 ;
   printf("Source : %" PRIu8 "\n", index);  
   binarray = dec_to_binarray(index, lg);
   printf("Version binaire :\t"); fprintf_binarray(stdout, binarray, lg); printf("\n");
@@ -169,7 +171,7 @@ void fprintf_index (FILE* f, uint8_t* current_buffer, int* buffer_length, const 
 
   // On ecrit ce premier buffer
   #ifdef DEBUG
-  fprintf(stdout, "On va ecrire :\t\t"); fprintf_binarray(stdout, writing_buffer, 8); fprintf(stdout, "\n");
+  fprintf(stdout, "On va ecrire :\t"); fprintf_binarray(stdout, writing_buffer, 8); fprintf(stdout, "\n");
   #endif
   if (fwrite(writing_buffer, 1, 8, f) < 1){
     #ifdef DEBUG
@@ -195,7 +197,7 @@ void fprintf_index (FILE* f, uint8_t* current_buffer, int* buffer_length, const 
 
     // On ecrit ce buffer
     #ifdef DEBUG
-    fprintf(stdout, "On va ecrire :\t\t"); fprintf_binarray(stdout, writing_buffer, 8); fprintf(stdout, "\n");
+    fprintf(stdout, "+ On va ecrire :\t"); fprintf_binarray(stdout, writing_buffer, 8); fprintf(stdout, "\n");
     #endif
     if (fwrite(writing_buffer, 1, 1, f) < 1){
       #ifdef DEBUG
@@ -218,11 +220,13 @@ void fprintf_index (FILE* f, uint8_t* current_buffer, int* buffer_length, const 
 
 void fflush_index (FILE* f, uint8_t* current_buffer, const int buffer_length){
 
-  #ifdef DEBUG
-  fprintf(stdout, "On va ajouter %i bit(s) de padding\n", 8 - buffer_length);
-  #endif
-  
+
+
   if (buffer_length != 0){
+    #ifdef DEBUG
+    fprintf(stdout, "On va ajouter %i bit(s) de padding\n", 8 - buffer_length);
+    #endif
+    
     // On place les 0s de padding a la fin du buffer
     for (int i = buffer_length; i < 8 - buffer_length; i++){
       current_buffer[i] = 0 ;
@@ -230,7 +234,7 @@ void fflush_index (FILE* f, uint8_t* current_buffer, const int buffer_length){
 
     // On ecrit ce buffer
     #ifdef DEBUG
-    fprintf(stdout, "On va ecrire :\t\t"); fprintf_binarray(stdout, current_buffer, 8); fprintf(stdout, "\n");
+    fprintf(stdout, "FF : On va ecrire :\t"); fprintf_binarray(stdout, current_buffer, 8); fprintf(stdout, "\n");
     #endif
     if (fwrite(current_buffer, 1, 8, f) < 1){
       #ifdef DEBUG
@@ -239,6 +243,11 @@ void fflush_index (FILE* f, uint8_t* current_buffer, const int buffer_length){
       exit(EXIT_FAILURE);
     }
   }
+  #ifdef DEBUG
+  else{
+    printf("On n'ajoute pas de padding\n");
+  }
+  #endif
 
 }
 

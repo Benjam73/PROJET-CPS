@@ -17,59 +17,137 @@ void compression (FILE* f_input, FILE* f_output){
 
 	dict_t dico ;
 
-	uint8_t* a = init_vect();
-	uint8_t* w = init_vect();
+	uint8_t* a = malloc(sizeof(uint8_t));
+	uint8_t* w = malloc(sizeof(uint8_t));
 
 	int taille ;
 
 	dict_index_t index = 0;
 
+	// Un tableau de representation binaire de l'octet a coder
+	int taille_codage = 9;
+	uint8_t *binarray ;
 
-        // D <- ens. de toutes les chaînes de longueur 1
+	// Un tableau de representation binaire
+	uint8_t *buffer = malloc(8 * sizeof(uint8_t));
+	int *lg_buf = malloc(sizeof(int)) ;
+	*lg_buf = 0 ;
+
+
+    // D <- ens. de toutes les chaînes de longueur 1
 	dico = dict_new();        
 
-        // w <- [1er octet de E]
+    // w <- [1er octet de E]
 	fread(w, 1, 1, f_input);
 	int wlength = 1;
+	#ifdef DEBUG
+	printf("w <- [1er octet de E]\n");
+	printf("Premier w : ");fprintf_n_octets(stdout, w, wlength);printf("\n\n");
+	#endif 
 
-        // tant que la fin de E n'est pas atteinte
+
+    // tant que la fin de E n'est pas atteinte
 	while (!feof(f_input)) {
 
-                // a <- octet suivant de E
+        // a <- octet suivant de E
+        #ifdef DEBUG
+		printf("a <- octet suivant de E\n");
+		#endif 
+
 		fread(a, 1, 1, f_input);
 
-                // si w .a est dans D alors
-		if (dict_rechercher_mot(dico, concatenation(w, wlength, a), wlength+1, &index, &taille) ==  DICT_NOERROR) {
-                       // w <- w .a                        
+    	#ifdef DEBUG
+		printf("a : ");fprintf_n_octets(stdout, a, 1);printf("\n");
+		#endif
+
+
+        // si w.a est dans D alors
+		if (dict_rechercher_mot(dico, concatenation(w, wlength, a), wlength + 1, &index, &taille) ==  DICT_NOERROR) {
+
+			#ifdef DEBUG
+			uint8_t* DEBUG_wa = malloc(2 * sizeof(uint8_t)) ; 
+			DEBUG_wa = concatenation(w, wlength, a);
+			fprintf_n_octets(stdout, DEBUG_wa, wlength + 1);printf(" est dans D\n");
+			#endif
+
+            // w <- w.a                        
+			#ifdef DEBUG
+			printf("w <- w.a\n");
+			#endif
 			w = concatenation(w, wlength, a);
 			wlength++;
-		}
-                // sinon
-		else{
-                        // ecrire sur S l'index associe a w dans D 
-			dict_rechercher_mot(dico, w, wlength, &index, &taille);
-                        /* Ici, index est un short int (16bits) mais contient 9bits de donnees
-                         * Ainsi, on utilise une procedure ecrivant les 8 premiers bits dans le fichier et sauvegardant le dernier bit afin de l'ecrire au rang suivant
-                         */
-			fprintf(f_output, "%d", index);
-			fprintf(f_output, ".");
 
-                        // D <- D U {w.a}
+		}
+        // sinon
+		else{
+
+			#ifdef DEBUG
+			uint8_t* DEBUG_wa = malloc(2 * sizeof(uint8_t)) ; 
+			DEBUG_wa = concatenation(w, wlength, a);
+			fprintf_n_octets(stdout, DEBUG_wa, wlength + 1);printf(" n'est pas dans D\n");
+			#endif
+
+
+            // Ecrire sur S l'index associe a w dans D 
+			if(dict_rechercher_mot(dico, w, wlength, &index, &taille) != DICT_NOERROR){
+				printf("Erreur de dictionnaire\n");
+				exit(EXIT_FAILURE);
+			}
+
+			#ifdef DEBUG
+			printf("Ecrire sur S l'index associe a w dans D\n");
+			printf("On ecrit donc ");fprintf_n_octets(stdout, w, wlength);printf(" d'index %hi = ", index);fprintf_binarray(stdout, dec_to_binarray(index,9), 9); fprintf(stdout, "\n");
+			#endif
+			
+			/* On place index dans un tableau binaire */
+			binarray = dec_to_binarray(index, taille_codage);
+			/* On ecrit cette representation binaire dans f_output */
+			fprintf_index(f_output, buffer, lg_buf, binarray, taille_codage);
+			#ifdef DEBUG
+			fprintf(stdout, "Contenu restant du buffer : "); fprintf_binarray(stdout, buffer, *lg_buf); printf("\n");
+			#endif
+
+            // D <- D U {w.a}
 			dict_insert(dico,concatenation(w, wlength, a), wlength+1);
 			
-			w = init_vect();
+			w = malloc(sizeof(uint8_t));
 			wlength = 1;
-
 			*w = *a;
 		}
+		#ifdef DEBUG
+		printf("\n");
+		#endif
 	}
-        // ecrire sur S l'index associé à w
-	dict_rechercher_mot(dico, w, wlength, &index, &taille);
-	// Ajout EOF
-	index = 256;
-	taille = 1;
-	fprintf_n_octets_comp(f_output, &index, taille);
-	fprintf(f_output, ".");
+
+    // Ecrire sur S l'index associé à w
+	// #ifdef DEBUG
+	// printf("Ecrire sur S l'index associé à w\n");
+	// #endif
+	// dict_rechercher_mot(dico, w, wlength, &index, &taille);
+	// /* On place index dans un tableau binaire */
+	// binarray = dec_to_binarray(index, taille_codage);
+	//  On ecrit cette representation binaire dans f_output 
+	// fprintf_index(f_output, buffer, lg_buf, binarray, taille_codage);
+	// #ifdef DEBUG
+	// fprintf(stdout, "Contenu restant du buffer : "); fprintf_binarray(stdout, buffer, *lg_buf); printf("\n");
+	// #endif
+
+	// AjoutEOF
+	#ifdef DEBUG
+	printf("Ajout de EOM\n");
+	printf("On ecrit donc EOM d'index %hi\n", EOM);
+	#endif
+	
+	binarray = dec_to_binarray(EOM, taille_codage);
+	fprintf_index(f_output, buffer, lg_buf, binarray, taille_codage);
+
+	#ifdef DEBUG
+	fprintf(stdout, "Contenu restant du buffer : "); fprintf_binarray(stdout, buffer, *lg_buf); printf("\n");
+	#endif
+
+
+	fflush_index(f_output, buffer, *lg_buf);
+
 
 }
 

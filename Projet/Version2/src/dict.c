@@ -191,13 +191,30 @@ void ajout_speciaux(dict_t dico){
 
 	//EndOfMessage = 256
 	dico->nb_elt = dico->nb_elt + 1;
-
-	courant->sym = ' ';
+	courant->sym = '!';
 	courant->code = dico->nb_elt-1 ;
 	courant->fils = NULL ;
 	courant->frere = NULL ;
-	dico->map[255]->frere = courant;
-	dico->map[256] = courant;
+	dico->map[EOM - 1]->frere = courant;
+	dico->map[EOM] = courant;
+
+	//AgrandirDictionnaire = 257
+	dico->nb_elt = dico->nb_elt + 1;
+	courant->sym = '+';
+	courant->code = dico->nb_elt-1 ;
+	courant->fils = NULL ;
+	courant->frere = NULL ;
+	dico->map[AD - 1]->frere = courant;
+	dico->map[AD] = courant;
+
+	//ReinitialiserDictionnaire = 258
+	dico->nb_elt = dico->nb_elt + 1;
+	courant->sym = ':';
+	courant->code = dico->nb_elt-1 ;
+	courant->fils = NULL ;
+	courant->frere = NULL ;
+	dico->map[RD - 1]->frere = courant;
+	dico->map[RD] = courant;
 }
 
 dict_t dict_new(){

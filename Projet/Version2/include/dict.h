@@ -70,6 +70,10 @@ struct _node {
   struct _node* pere ;    // Le noeud de profondeur inferieure
 };
 
+#define EOM 256
+#define AD 257
+#define RD 258
+
 /**
  * @brief      Fonction affichant le dictionnaire
  *
@@ -114,8 +118,6 @@ dict_error_t dict_insert(dict_t dico, uint8_t* mot, int taille_mot) ;
  *
  * @return     Le code d'erreur correspondant suivant l'execution de la fonction
  */
-
-
 dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict_index_t* resultat, int* taille);
 
 

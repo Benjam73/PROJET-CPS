@@ -16,6 +16,7 @@
 
 #include "dict.h"
 #include "chaine_carac.h"
+#include "IO.h"
 
 /**
  * @brief      Fonction compressant le fichier f_input et ecrivant le resultat de f_output
