@@ -186,7 +186,7 @@ void ajout_premier(dict_t dico){
 	dico->map[dico->nb_elt-1] = courant;
 }
 
-//Permet d'ajouter les symbole spéciaux dans le dictionnaire
+//Permet d'ajouter les symbole speciaux dans le dictionnaire
 void ajout_speciaux(dict_t dico){
 
 	noeud_t courant = malloc(sizeof(struct _node)) ;
