@@ -56,7 +56,6 @@ dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* res
 
 	*taille_resultat = dico->map[i].taille ;
 
-
 	if(realloc(resultat, *taille_resultat * sizeof(uint8_t)) == NULL){
 		exit(EXIT_FAILURE);
 	}

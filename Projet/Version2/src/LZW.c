@@ -110,6 +110,17 @@ void compression (FILE* f_input, FILE* f_output){
 			#endif
 
             // D <- D U {w.a}
+            if(dico->nb_elt >= (1 << taille_codage)){
+    	      	binarray = dec_to_binarray(AD, taille_codage);
+				fprintf_index(f_output, buffer, lg_buf, binarray, taille_codage);
+				taille_codage++;
+
+            } 
+            else if (dico->nb_elt >= TAILLE_MAX){
+            	binarray = dec_to_binarray(RD, taille_codage);
+				fprintf_index(f_output, buffer, lg_buf, binarray, taille_codage);
+				dict_reinit(dico);
+            }
 			dict_insert(dico,concatenation(w, wlength, a), wlength+1);
 			
 			w = malloc(sizeof(uint8_t));
@@ -119,7 +130,10 @@ void compression (FILE* f_input, FILE* f_output){
 		#ifdef DEBUG
 		printf("\n");
 		#endif
+			//dict_print(dico);
 	}
+
+
 
 	// AjoutEOF
 	#ifdef DEBUG
@@ -136,7 +150,6 @@ void compression (FILE* f_input, FILE* f_output){
 
 
 	fflush_index(f_output, buffer, *lg_buf);
-
 
 }
 
@@ -214,12 +227,12 @@ void decompression (FILE* f_input, FILE* f_output){
 				EOM_received = true ;
 				break;
 			case AD :
+				binarray_length++;
 				// TODO : implementer AgrandirDictionnaire
-				/* Code */
 			break;
 			case RD:
 				// TODO : implementer ReinitialiserDictionnaire
-				/* Code */
+				dict_reinit(dico);
 			break;
 			default:
 			
@@ -262,6 +275,8 @@ void decompression (FILE* f_input, FILE* f_output){
 		        #ifdef DEBUG
 	            printf("On ajoute ");fprintf_n_octets(stdout, concatenation(w1, *len_w1, a), (*len_w1) + 1);printf("\n");
 	            #endif
+
+
 				dict_insert(dico, concatenation(w1, *len_w1, a), (*len_w1) + 1);
 	            
 	            // i1 <- i2
