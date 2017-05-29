@@ -62,7 +62,7 @@ int to_int(uint8_t* tab, int taille){
 
 void rle (FILE* f_input, FILE* f_output){
 	char courant ;
-	char compare ; 
+	char compare ;
 	fscanf(f_input, "%c", &compare) ;
 
 	int cpt = 1;
@@ -73,7 +73,7 @@ void rle (FILE* f_input, FILE* f_output){
 			cpt++;
 		}
 		else{
-			if (cpt>1){			
+			if (cpt>1){
 				fprintf(f_output,"%d", cpt);
 				fprintf(f_output,"%c", compare);
 			}
@@ -89,40 +89,82 @@ void rle (FILE* f_input, FILE* f_output){
 }
 
 void elr (FILE* f_input, FILE* f_output){
-	char carac;
-	char tmp;
-	char tempo = 0;
-	char cpttemp;
-	int cptres = 0;
+    int entier=0;
+    char carac;
+    //fread(tmp, 1, 1, f_input);
 
-	//fread(tmp, 1, 1, f_input);
+    while (!feof(f_input)) {
+        int scan = fscanf(f_input,"%d", &entier);
+        fscanf(f_input,"%c", &carac);
+        fscanf(f_input,".");
+        // printf("plop\n");
+        if (scan == 0){
+            // printf("bla\n");
+            fprintf(f_output, "%c", carac);
+        }else{
+            while(entier != 0){
+                printf("%c\n",carac);
+                fprintf(f_output, "%c", carac);
+            }
+        }
+        //printf("%d",uint8_cmp(tmp,".",1));
+        // while(courant != '.') {
+        //     printf("while2\n");
+        //     cpttemp[cpt] = courant;
+        //     cpt++;
+        //     carac = courant;
+        //     fscanf(f_input,"%c", courant);
+        // }
+        // for (int i = 0 ; cpt > i; i++ ){
+        //     tempo = cpttemp[i];
+        //     cptres = cptres * 10 + to_int(&tempo, 1);
+        //     printf("for1\n");
 
-	int cpt = 0;
-	while (!feof(f_input)) {
-		cpt = 0;
-		fscanf(f_input,"%c", tmp);
-		//printf("%d",uint8_cmp(tmp,".",1));
-		while(tmp == '.') {
-			printf("while2\n");
-			cpttemp[cpt] = tmp[0];
-			cpt++;
-			carac = tmp;
-			fscanf(f_input,"%c", tmp);
-		}
-		for (int i = 0 ; cpt > i; i++ ){
-			tempo = cpttemp[i];
-			cptres = cptres * 10 + to_int(&tempo, 1);
-			printf("for1\n");
 
-
-		}
-		for (; cptres > 0 ; cptres --){
-			fprintf_n_octets(f_output,carac, 1);
-			printf("for2\n");
-		}
-		// printf("while1\n");
-	}
+        // }
+        // for (; cptres > 0 ; cptres --){
+        //     fprintf_n_octets(f_output,carac, 1);
+        //     printf("for2\n");
+        // }
+        // printf("while1\n");
+    }
 }
+
+// void elr (FILE* f_input, FILE* f_output){
+// 	char carac;
+// 	char courant;
+// 	char tempo = 0;
+// 	char cpttemp;
+// 	int cptres = 0;
+
+// 	//fread(tmp, 1, 1, f_input);
+
+// 	int cpt = 0;
+// 	while (!feof(f_input)) {
+// 		cpt = 0;
+// 		fscanf(f_input,"%c", courant);
+// 		//printf("%d",uint8_cmp(tmp,".",1));
+// 		while(courant != '.') {
+// 			printf("while2\n");
+// 			cpttemp[cpt] = courant;
+// 			cpt++;
+// 			carac = courant;
+// 			fscanf(f_input,"%c", courant);
+// 		}
+// 		for (int i = 0 ; cpt > i; i++ ){
+// 			tempo = cpttemp[i];
+// 			cptres = cptres * 10 + to_int(&tempo, 1);
+// 			printf("for1\n");
+
+
+// 		}
+// 		for (; cptres > 0 ; cptres --){
+// 			fprintf_n_octets(f_output,carac, 1);
+// 			printf("for2\n");
+// 		}
+// 		// printf("while1\n");
+// 	}
+// }
 
 int main(int argc, char *argv[]){
 
