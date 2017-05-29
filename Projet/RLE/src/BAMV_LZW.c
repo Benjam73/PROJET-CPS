@@ -3,6 +3,7 @@
 
 #include "dict.h"
 #include "LZW.h"
+#include "RLE.h"
 
 #define true 1
 #define false 0
@@ -15,10 +16,10 @@
 //   1 si un des arguments n'etait pas un fichier valable
 int main(int argc, char *argv[]){
 
-	int argument_aide = false, comp = false, decomp =false ;
+	int argument_aide = false, comp = false, decomp =false, RLE = false, ELR = false ;
 	
 
-	FILE *f_input_c, *f_output_c, *f_input_x, *f_output_x ;
+	FILE *f_input_c, *f_output_c, *f_input_x, *f_output_x, *f_input_r, *f_output_r, *f_input_e, *f_output_e ;
 
 	
 	#ifdef TEST_CHAINE_CARAC
@@ -33,13 +34,13 @@ int main(int argc, char *argv[]){
 
 	if(argc < 3 || argc > 5 || argument_aide){
 		fprintf(stdout, "%s [-c fichier_entree ficher_sortie] [-x fichier_entree ficher_sortie]\n", argv[0]);
-		fprintf(stdout, "Arguments : \n\t -c : compression\n\t -x : decompression\n");
+		fprintf(stdout, "Arguments : \n\t -c : compression\n\t -x : decompression\n\t -r : rle \n\t -e : elr\n" );
 		return 1 ;
 	}
 
 
 	// Ouverture fichiers donnes en parametres
-	for (int i = 1 ; i < argc && !(comp && decomp) ; i++){
+	for (int i = 1 ; i < argc && !(comp && decomp && RLE && ELR) ; i++){
 		if (strcmp(argv[i], "-c") == 0){
 			f_input_c = fopen(argv[i + 1], "rb");
 			f_output_c = fopen(argv[i + 2], "wb");
@@ -49,6 +50,16 @@ int main(int argc, char *argv[]){
 			f_input_x = fopen(argv[i + 1], "rb");
 			f_output_x = fopen(argv[i + 2], "wb");
 			decomp = true ;
+		}
+		if (strcmp(argv[i], "-r") == 0){
+			f_input_r = fopen(argv[i + 1], "r");
+			f_output_r = fopen(argv[i + 2], "w");
+			RLE= true ;
+		}
+		if (strcmp(argv[i], "-e") == 0){
+			f_input_e = fopen(argv[i + 1], "r");
+			f_output_e = fopen(argv[i + 2], "w");
+			ELR = true ;
 		}
 	}
 	// Verifications ouverture fichiers donnes en parametres
@@ -72,6 +83,26 @@ int main(int argc, char *argv[]){
 			return 1 ;
 		}
 	}
+	if(RLE) {
+		if (f_input_r == NULL){
+			fprintf(stdout, "%s\n", "Erreur ouverture ficher entree rle");
+			return 1 ;
+		}
+		if (f_output_r == NULL){
+			fprintf(stdout, "%s\n", "Erreur ouverture ficher sortie rle");
+			return 1 ;
+		}		
+	}
+	if(ELR){
+		if (f_input_e == NULL){
+			fprintf(stdout, "%s\n", "Erreur ouverture ficher entree elr");
+			return 1 ;
+		}
+		if (f_output_e == NULL){
+			fprintf(stdout, "%s\n", "Erreur ouverture ficher sortie elr");
+			return 1 ;
+		}
+	}
 
 
 
@@ -84,6 +115,15 @@ int main(int argc, char *argv[]){
 		fprintf(stdout, "On effectue une decompression\n");
 		decompression (f_input_x, f_output_x);
 	}
+	if (RLE){
+		fprintf(stdout, "On effectue un codage RLE\n");
+		rle (f_input_r, f_output_r);
+	}
+
+	if (ELR){
+		fprintf(stdout, "On effectue un décodage ELR\n");
+		elr (f_input_e, f_output_e);
+	}
 
 
 
@@ -95,6 +135,15 @@ int main(int argc, char *argv[]){
 	if (decomp){
 		fclose(f_input_x);
 		fclose(f_output_x);	
+	}
+	if (RLE){
+		fclose(f_input_r);
+		fclose(f_output_r);
+	}
+
+	if (ELR){
+		fclose(f_input_e);
+		fclose(f_output_e);	
 	}
 
 	return 0;
