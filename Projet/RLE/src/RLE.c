@@ -94,39 +94,35 @@ void elr (FILE* f_input, FILE* f_output){
     //fread(tmp, 1, 1, f_input);
 
     while (!feof(f_input)) {
-        int scan = fscanf(f_input,"%d", &entier);
-        fscanf(f_input,"%c", &carac);
+        int scan_int = fscanf(f_input,"%d", &entier);
+        int scan_carac = fscanf(f_input,"%c", &carac);
         fscanf(f_input,".");
         // printf("plop\n");
-        if (scan == 0){
-            // printf("bla\n");
-            fprintf(f_output, "%c", carac);
+        if (carac == '.'){
+            if (entier<10){
+                fprintf(f_output, "%d", entier);
+            }else{
+                int new_entier = entier%10;
+                int new_cpt = (entier-new_entier)/10;
+                while(new_cpt != 0){
+                    printf("%d\n",new_entier);
+                    fprintf(f_output, "%d", new_entier);
+                    new_cpt--;
+                }
+            }
         }else{
-            while(entier != 0){
-                printf("%c\n",carac);
+            if (scan_int == 0){
+                // printf("bla\n");
                 fprintf(f_output, "%c", carac);
+            }else{
+                printf("%d\n", entier);
+                while(entier != 0){
+                    // printf("%c\n",carac);
+                    fprintf(f_output, "%c", carac);
+                    entier--;
+                }
             }
         }
-        //printf("%d",uint8_cmp(tmp,".",1));
-        // while(courant != '.') {
-        //     printf("while2\n");
-        //     cpttemp[cpt] = courant;
-        //     cpt++;
-        //     carac = courant;
-        //     fscanf(f_input,"%c", courant);
-        // }
-        // for (int i = 0 ; cpt > i; i++ ){
-        //     tempo = cpttemp[i];
-        //     cptres = cptres * 10 + to_int(&tempo, 1);
-        //     printf("for1\n");
-
-
-        // }
-        // for (; cptres > 0 ; cptres --){
-        //     fprintf_n_octets(f_output,carac, 1);
-        //     printf("for2\n");
-        // }
-        // printf("while1\n");
     }
 }
 
