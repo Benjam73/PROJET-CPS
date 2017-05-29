@@ -56,6 +56,7 @@ dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* res
 
 	*taille_resultat = dico->map[i].taille ;
 
+
 	if(realloc(resultat, *taille_resultat * sizeof(uint8_t)) == NULL){
 		exit(EXIT_FAILURE);
 	}
@@ -67,10 +68,12 @@ dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* res
 		resultat[0] = noeud_courant->sym;
 		while (noeud_courant->pere != NULL) {
 			noeud_courant = noeud_courant->pere;
-			resultat[*taille_resultat - j] = noeud_courant->sym;
+			//resultat[*taille_resultat - (j + 1)] = noeud_courant->sym;
+			resultat[(j + 1)] = noeud_courant->sym;
 			j++;
 		}
-		(*taille_resultat)++;
+		
+		//(*taille_resultat)++;
 
 		// On retourne le mot   
 		// if(j != 1){

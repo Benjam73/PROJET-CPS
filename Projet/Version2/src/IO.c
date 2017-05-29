@@ -88,6 +88,8 @@ void test_IO(){
 
   fclose(f);
 
+
+
 }
 
 
@@ -126,28 +128,35 @@ uint8_t* dec_to_binarray(const dict_index_t n, const int array_length){
 // Resultat systematiquement de taille 8
 uint8_t* byte_to_binarray(const uint8_t* byte){
 
-  int offset, bit, count;
+  // int offset, bit, count;
 
-  count = 0;
+  // count = 0;
   uint8_t* array = malloc(8 * sizeof(uint8_t));
 
 
-  if ( array == NULL ){
-    exit(EXIT_FAILURE);
-  }
+  // if ( array == NULL ){
+  //   exit(EXIT_FAILURE);
+  // }
 
-  for (offset = 7 ; offset >= 0 ; offset--){
+  // for (offset = 7 ; offset >= 0 ; offset--){
 
-    bit = 8 >> offset;
+  //   bit = 8 >> offset;
 
-    if (bit & 1){
-      *(array+count) = 1 ;
-    }
-    else{
-      *(array+count) = 0 ;
-    }
+  //   if (bit & 1){
+  //     *(array+count) = 1 ;
+  //   }
+  //   else{
+  //     *(array+count) = 0 ;
+  //   }
 
-    count++;
+  //   count++;
+  // }
+  // #ifdef DEBUG
+  // printf("On renvoit ");fprintf_binarray(stdout,array, 8);printf("\n");
+  // #endif
+
+  for (int i = 0; i < 8; i++){
+    array[7 - i] = (*byte & (1 << i)) >> i;
   }
 
   return  array; 
@@ -281,7 +290,7 @@ void fflush_index (FILE* f, uint8_t* current_buffer, const int buffer_length){
     fprintf(stdout, "FF : On va ecrire :\t"); fprintf_binarray(stdout, current_buffer, 8); fprintf(stdout, "\n");
     #endif
     writing_byte = binarray_to_byte(current_buffer);
-    if (fwrite(writing_byte, 1, 8, f) < 1){
+    if (fwrite(writing_byte, 1, 1, f) < 1){
       #ifdef DEBUG
       fprintf(stdout, "Erreur d'ecriture\n");
       #endif
@@ -324,6 +333,10 @@ void fread_index(FILE* f, uint8_t* current_buffer, int* buffer_length, uint8_t* 
     // On recupere un octet depuis le fichier 
     fread(reading_byte, 1, 1, f) ;
     reading_buffer = byte_to_binarray(reading_byte);
+
+    #ifdef DEBUG
+    printf("On a lu ");fprintf_binarray(stdout, reading_buffer, 8);printf("\n");
+    #endif
 
     // On recopie cet octet dans index
     written_bits_from_reading_buffer = 0 ;

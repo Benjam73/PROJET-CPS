@@ -195,8 +195,11 @@ void decompression (FILE* f_input, FILE* f_output){
 
 
     // ecrire w sur E
-	fprintf_index (f_output, current_buffer, buffer_length, w1, *len_w1);
-
+	#ifdef DEBUG
+	printf("On ecrit ");fprintf_n_octets(stdout, w1, *len_w1);printf("\n");
+	#endif
+	fprintf_n_octets(f_output, w1, *len_w1);
+	
 
 	//FIXME : A TERMINER D'ADAPTER AU BINAIRE
 
@@ -221,13 +224,23 @@ void decompression (FILE* f_input, FILE* f_output){
 			break;
 			default:
 			
+				#ifdef DEBUG
+				printf("i1 = %hi\ti2 = %hi\n", i1, i2);
+				#endif
+
 				// Si i1 appartient a D alors
 				if (dict_rechercher_index(dico, i1, chaine_temp, len_chaine_temp) == DICT_NOERROR){
 					// w2 <- chaine d'index i2 dans D
+					#ifdef DEBUG
+					printf("NON\n");
+					#endif
 					dict_rechercher_index(dico, i2, w2, len_w2);
 				}
 				// Si i1 n'appartient pas a D alors 
 				else{
+					#ifdef DEBUG
+					printf("OUI\n");
+					#endif
 					// w2 <- chaîne d'index i1 dans D
 					dict_rechercher_index(dico, i1, w2, len_w2);
 					// w2 <- w2.a
@@ -237,6 +250,9 @@ void decompression (FILE* f_input, FILE* f_output){
 
 
 	            // ecrire w2 sur E 
+	            #ifdef DEBUG
+	            printf("On ecrit ");fprintf_n_octets(stdout, w2, *len_w2);printf("\n");
+	            #endif
 				fprintf_n_octets(f_output, w2, *len_w2);
 
 
