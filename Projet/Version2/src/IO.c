@@ -233,7 +233,8 @@ void fprintf_index (FILE* f, uint8_t* current_buffer, int* buffer_length, const 
     // On recopie index[first_bit_remaining_in_index .. buffer_length] dans index
     current_buffer[i] = index[first_bit_remaining_in_index + i];
   }
-  
+  free(writing_buffer);
+
 }
 
 
@@ -324,4 +325,6 @@ void fread_index(FILE* f, uint8_t* current_buffer, int* buffer_length, uint8_t* 
     current_buffer[i] = reading_buffer[first_bit_remaining_in_reading_buffer + i] ;
   }
   *buffer_length = bits_remaining ;
+  free(reading_byte);
+  free(reading_buffer);
 }

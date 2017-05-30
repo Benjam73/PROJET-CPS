@@ -187,6 +187,9 @@ void dict_print (const dict_t dico){
 		printf("Code : %d \t Mot courant : %s\n", i, mot_courant);
 	}
 
+	free(mot_courant);
+	free(taille_mot);
+
 }
 
 void ajout_premier(dict_t dico){
