@@ -77,21 +77,24 @@ void compression (FILE* f_input, FILE* f_output){
 
 
 			// Si le nombre d'element du dictionnaire depasse le nombre d'elements representable avec la taille de codage actuelle, on agrandit celle-ci 
-            if(dico->nb_elt >= (1 << taille_codage)){
-    	      	binarray = dec_to_binarray(AD, taille_codage);
+			if(dico->nb_elt >= (1 << taille_codage)){
+				binarray = dec_to_binarray(AD, taille_codage);
 				fprintf_index(f_output, buffer, lg_buf, binarray, taille_codage);
 				taille_codage++;
-            } 
+			} 
             // Si le nombre d'element du dictionnaire depasse le nombre d'elements qu'il peut stocker, on le reinitialise 
-            else if (dico->nb_elt >= TAILLE_MAX){
-            	binarray = dec_to_binarray(RD, taille_codage);
+			else if (dico->nb_elt >= TAILLE_MAX){
+				binarray = dec_to_binarray(RD, taille_codage);
 				fprintf_index(f_output, buffer, lg_buf, binarray, taille_codage);
 				dict_reinit(dico);
-            }
+				taille_codage = 9;
+
+			}
 
             // D <- D U {w.a}
 			dict_insert(dico,concatenation(w, wlength, a), wlength+1);
-			
+
+			free(w);
 			w = malloc(sizeof(uint8_t));
 			wlength = 1;
 			*w = *a;
@@ -109,7 +112,11 @@ void compression (FILE* f_input, FILE* f_output){
 	fprintf_index(f_output, buffer, lg_buf, binarray, taille_codage);
 
 	fflush_index(f_output, buffer, *lg_buf);
-
+	free(buffer);
+	free(w);
+	free(a);
+	free(lg_buf);
+	free_dico(dico);
 
 }
 
@@ -148,7 +155,7 @@ void decompression (FILE* f_input, FILE* f_output){
 	fread_index(f_input, current_buffer, buffer_length, binarray, binarray_length);
 	i1 = binarray_to_dec(binarray, binarray_length);
 	#ifdef DEBUG
-    fprintf(stdout, "On a recupere l'index : "); fprintf_binarray(stdout, binarray, binarray_length); printf("\n");
+	fprintf(stdout, "On a recupere l'index : "); fprintf_binarray(stdout, binarray, binarray_length); printf("\n");
 	#endif
 
 	// a <- chaine d'index i dans D
@@ -173,66 +180,67 @@ void decompression (FILE* f_input, FILE* f_output){
 		fread_index(f_input, current_buffer, buffer_length, binarray, binarray_length);
 		i2 = binarray_to_dec(binarray, binarray_length);
 		#ifdef DEBUG
-        fprintf(stdout, "On a recupere l'index : "); fprintf_binarray(stdout, binarray, binarray_length); printf("\n");
+		fprintf(stdout, "On a recupere l'index : "); fprintf_binarray(stdout, binarray, binarray_length); printf("\n");
 		#endif
 
 
 		switch (i2){
 			case EOM : 
-				EOM_received = true ;
-				break;
+			EOM_received = true ;
+			break;
 			case AD :
-				binarray_length++;
-				break;
+			binarray_length++;
+			break;
 			case RD:
-				dict_reinit(dico);
-				break;
+			binarray_length = 9;
+			dict_reinit(dico);
+			break;
 			default:
 				// Si i1 appartient a D alors
-				if (dict_rechercher_index(dico, i2, chaine_temp, len_chaine_temp) == DICT_NOERROR){
+			if (dict_rechercher_index(dico, i2, chaine_temp, len_chaine_temp) == DICT_NOERROR){
 					// w2 <- chaine d'index i2 dans D
 					#ifdef DEBUG
-					printf("%hi trouve dans le dictionnaire\n", i2);
+				printf("%hi trouve dans le dictionnaire\n", i2);
 					#endif
-					dict_rechercher_index(dico, i2, w2, len_w2);
-				}
+				dict_rechercher_index(dico, i2, w2, len_w2);
+			}
 				// Si i1 n'appartient pas a D alors 
-				else{
+			else{
 					#ifdef DEBUG
-					printf("%hi NON trouve dans le dictionnaire\n", i1);
+				printf("%hi NON trouve dans le dictionnaire\n", i1);
 					#endif
 					// w2 <- chaîne d'index i1 dans D
-					dict_rechercher_index(dico, i1, w2, len_w2);
+				dict_rechercher_index(dico, i1, w2, len_w2);
 					// w2 <- w2.a
-					w2 = concatenation(w2, *len_w2, a);
-					len_w2++;
-				}
+				w2 = concatenation(w2, *len_w2, a);
+				len_w2++;
+			}
 
 
 	            // ecrire w2 sur E 
 	            #ifdef DEBUG
-	            printf("On ecrit ");fprintf_n_octets(stdout, w2, *len_w2);printf("\n");
+			printf("On ecrit ");fprintf_n_octets(stdout, w2, *len_w2);printf("\n");
 	            #endif
-				fprintf_n_octets(f_output, w2, *len_w2);
+			fprintf_n_octets(f_output, w2, *len_w2);
 
 
 	            // a <- 1er octet de w' 
-				a[0] = w2[0] ;
+			a[0] = w2[0] ;
 
 	            // D <- D U {w.a}
 		        #ifdef DEBUG
-	            printf("On ajoute ");fprintf_n_octets(stdout, concatenation(w1, *len_w1, a), (*len_w1) + 1);printf(" au dictionnaire\n");
+			printf("On ajoute ");fprintf_n_octets(stdout, concatenation(w1, *len_w1, a), (*len_w1) + 1);printf(" au dictionnaire\n");
 	            #endif
 
 
-				dict_insert(dico, concatenation(w1, *len_w1, a), (*len_w1) + 1);
-	            
+			dict_insert(dico, concatenation(w1, *len_w1, a), (*len_w1) + 1);
+
 	            // i1 <- i2
-				i1 = i2 ;
+			i1 = i2 ;
 
 	            // w <- chaine d'index i dans D
-	            dict_rechercher_index(dico, i1, w1, len_w1);
-				
+			dict_rechercher_index(dico, i1, w1, len_w1);
+
 			
 		}
 
@@ -242,4 +250,12 @@ void decompression (FILE* f_input, FILE* f_output){
 		}
 		#endif 
 	}
+
+	free(w1);
+	free(w2);
+	free(a);
+	free(binarray);
+	free(buffer_length);
+	free(current_buffer);
+	free_dico(dico);
 }

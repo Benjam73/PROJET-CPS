@@ -15,83 +15,35 @@ void test_chaine_carac(){
 	
 }
 
-void fprintf_n_octets(FILE* f, uint8_t* word, int n){
+void fprintf_n_octets(FILE* f, const uint8_t* word, const int n){
+	
+	// TODO : Adapter au binaire
+
 	// for (int i = 0; i < n; i++){
 	// 	fprintf(f, "%" PRIu8 ".", word[i]);
-	// 	// #ifdef DEBUG
-	// 	// fprintf(stdout, " -> On ecrit\n");
-	// 	// #endif
 	// }
-	// fprintf(f, " \"");
+	
+
+	if (f == stdout){
+		fprintf(f, "'");  
+	}	
 	for (int i = 0; i < n; i++){
 		fprintf(f, "%c", word[i]);  
 	}
-	// fprintf(f, "\" ");
+	if (f == stdout){
+		fprintf(f, "'");  
+	}	
 	fflush(f);
 }
 
-void fprintf_n_octets_comp(FILE* f, dict_index_t* index, int n){
-	for (int i = 0; i < n; i++){
-		fprintf(f, "%d", index[i]);
-		#ifdef DEBUG
-		fprintf(stdout, " -> On ecrit\n");
-		fflush(stdout);
-		#endif
-	}
-	fflush(f);
-}
 
-uint8_t* concatenation(uint8_t* w, int wlength, uint8_t* a){
+uint8_t* concatenation(const uint8_t* w, const int wlength, const uint8_t* a){
 	uint8_t* wa = malloc(sizeof(uint8_t));
 	int i;
 	for (i = 0; i < wlength; i++){
 		wa[i] = w[i];
 	}
-	wa[i] = a[0];
+	wa[i] = *a;
 	return wa;
 }
 
-int adapter_longueur(uint8_t* w1){
-	int lg =0;
-	for(int i = 0; i<16; i++){
-		if(w1[i] != 0x0){
-			lg++;
-		}
-	}
-	return lg;
-}
-
-
-int uint8_cmp(uint8_t* tab, char* tab2, int taille){
-	int monbool = 1;
-	for(int i = 0; i < taille && monbool == 1; i++){
-		if(tab[i] != tab2[i]){
-			monbool = 0;
-		}
-	}
-	return !monbool;
-}
-
-dict_index_t to_index(uint8_t* tab, int taille){
-	int result = 0;
-	char tmp;
-	for(int i = 0; i < taille; i++){
-		tmp = tab[i];
-		result += atoi(&tmp);
-	}
-	return result;
-}
-
-uint8_t* init_vect(){
-	uint8_t* tab = malloc(sizeof(uint8_t));
-	while(adapter_longueur(tab) != 0){
-		tab = malloc(sizeof(uint8_t));
-	}
-	return tab;
-}
-
-void fflush_vect(uint8_t* tab, int taille){
-	for(int i = 0; i < taille; i++){
-		tab[i] = 0x0;
-	}
-}
