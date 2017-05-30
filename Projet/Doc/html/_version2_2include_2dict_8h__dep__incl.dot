@@ -1,0 +1,43 @@
+digraph "Version2/include/dict.h"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="Version2/include/dict.h",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="RLE/src/BAMV_LZW.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_r_l_e_2src_2_b_a_m_v___l_z_w_8c.html"];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="RLE/src/dict.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_r_l_e_2src_2dict_8c.html"];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="Version1/src/BAMV_LZW.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_version1_2src_2_b_a_m_v___l_z_w_8c.html"];
+  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="Version1/src/dict.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_version1_2src_2dict_8c.html"];
+  Node1 -> Node6 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="Version2/include/chaine\l_carac.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_version2_2include_2chaine__carac_8h.html"];
+  Node6 -> Node7 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="RLE/src/chaine_carac.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_r_l_e_2src_2chaine__carac_8c.html"];
+  Node6 -> Node8 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="Version1/src/chaine\l_carac.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_version1_2src_2chaine__carac_8c.html"];
+  Node6 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 [label="Version2/include/LZW.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_version2_2include_2_l_z_w_8h.html"];
+  Node9 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 -> Node10 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 [label="RLE/src/LZW.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_r_l_e_2src_2_l_z_w_8c.html"];
+  Node9 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 -> Node11 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node11 [label="Version1/src/LZW.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_version1_2src_2_l_z_w_8c.html"];
+  Node9 -> Node12 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node12 [label="Version2/src/BAMV_LZW.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_version2_2src_2_b_a_m_v___l_z_w_8c.html"];
+  Node9 -> Node13 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node13 [label="Version2/src/LZW.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_version2_2src_2_l_z_w_8c.html"];
+  Node6 -> Node14 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node14 [label="Version2/src/chaine\l_carac.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_version2_2src_2chaine__carac_8c.html"];
+  Node1 -> Node15 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node15 [label="Version2/include/IO.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_i_o_8h.html",tooltip="Gestion d&#39;entrees et sorties. "];
+  Node15 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node15 -> Node16 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node16 [label="Version2/src/IO.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_i_o_8c.html"];
+  Node1 -> Node9 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node12 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node17 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node17 [label="Version2/src/dict.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$_version2_2src_2dict_8c.html"];
+}

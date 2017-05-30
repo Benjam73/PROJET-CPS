@@ -1,0 +1,12 @@
+digraph "_dict"
+{
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  Node1 [label="_dict",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
+  Node2 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" map" ,fontname="Helvetica"];
+  Node2 [label="hashmap",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$structhashmap.html",tooltip="Donne un pointeur de noeud et la longueur du mot associe. "];
+  Node3 -> Node2 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" noeud" ,fontname="Helvetica"];
+  Node3 [label="_node",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$struct__node.html",tooltip="Structure caracterisant un noeud, chaque noeud possede un symbole, un code et pointeur vers sont noeu..."];
+  Node3 -> Node3 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" frere\npere\nfils" ,fontname="Helvetica"];
+  Node3 -> Node1 [dir="back",color="darkorchid3",fontsize="10",style="dashed",label=" map\nracine" ,fontname="Helvetica"];
+}
