@@ -1,9 +1,5 @@
 #include "LZW.h"
 
-
-
-
-
 void compression (FILE* f_input, FILE* f_output){
 
 	bool EOM_sent = false ;
@@ -33,26 +29,12 @@ void compression (FILE* f_input, FILE* f_output){
     // w <- [1er octet de E]
 	fread(w, 1, 1, f_input);
 	int wlength = 1;
-	#ifdef DEBUG
-	printf("w <- [1er octet de E]\n");
-	printf("Premier w : ");fprintf_n_octets(stdout, w, wlength);printf("\n\n");
-	#endif 
-
 
     // tant que la fin de E n'est pas atteinte
 	while (!feof(f_input) && !EOM_sent) {
 
         // a <- octet suivant de E
-        #ifdef DEBUG
-		printf("a <- octet suivant de E\n");
-		#endif 
-
 		fread(a, 1, 1, f_input);
-
-    	#ifdef DEBUG
-		printf("a : ");fprintf_n_octets(stdout, a, 1);printf("\n");
-		#endif
-
 
         // si w.a est dans D alors
 		if (dict_rechercher_mot(dico, concatenation(w, wlength, a), wlength + 1, &index, &taille) ==  DICT_NOERROR) {
@@ -60,13 +42,10 @@ void compression (FILE* f_input, FILE* f_output){
 			#ifdef DEBUG
 			uint8_t* DEBUG_wa = malloc(2 * sizeof(uint8_t)) ; 
 			DEBUG_wa = concatenation(w, wlength, a);
-			fprintf_n_octets(stdout, DEBUG_wa, wlength + 1);printf(" est dans D\n");
+			fprintf_n_octets(stdout, DEBUG_wa, wlength + 1);printf(" trouve dans le dictionnaire\n");
 			#endif
 
-            // w <- w.a                        
-			#ifdef DEBUG
-			printf("w <- w.a\n");
-			#endif
+            // w <- w.a
 			w = concatenation(w, wlength, a);
 			wlength++;
 
@@ -77,7 +56,7 @@ void compression (FILE* f_input, FILE* f_output){
 			#ifdef DEBUG
 			uint8_t* DEBUG_wa = malloc(2 * sizeof(uint8_t)) ; 
 			DEBUG_wa = concatenation(w, wlength, a);
-			fprintf_n_octets(stdout, DEBUG_wa, wlength + 1);printf(" n'est pas dans D\n");
+			fprintf_n_octets(stdout, DEBUG_wa, wlength + 1);printf(" non trouve dans le dictionnaire\n");
 			#endif
 
 
@@ -88,7 +67,6 @@ void compression (FILE* f_input, FILE* f_output){
 			}
 
 			#ifdef DEBUG
-			printf("Ecrire sur S l'index associe a w dans D\n");
 			printf("On ecrit donc ");fprintf_n_octets(stdout, w, wlength);printf(" d'index %hi = ", index);fprintf_binarray(stdout, dec_to_binarray(index,9), 9); fprintf(stdout, "\n");
 			#endif
 			
@@ -96,32 +74,28 @@ void compression (FILE* f_input, FILE* f_output){
 			binarray = dec_to_binarray(index, taille_codage);
 			/* On ecrit cette representation binaire dans f_output */
 			fprintf_index(f_output, buffer, lg_buf, binarray, taille_codage);
-			#ifdef DEBUG
-			fprintf(stdout, "Contenu restant du buffer : "); fprintf_binarray(stdout, buffer, *lg_buf); printf("\n");
-			#endif
 
-            // D <- D U {w.a}
+
+			// Si le nombre d'element du dictionnaire depasse le nombre d'elements representable avec la taille de codage actuelle, on agrandit celle-ci 
             if(dico->nb_elt >= (1 << taille_codage)){
     	      	binarray = dec_to_binarray(AD, taille_codage);
 				fprintf_index(f_output, buffer, lg_buf, binarray, taille_codage);
 				taille_codage++;
-
             } 
+            // Si le nombre d'element du dictionnaire depasse le nombre d'elements qu'il peut stocker, on le reinitialise 
             else if (dico->nb_elt >= TAILLE_MAX){
             	binarray = dec_to_binarray(RD, taille_codage);
 				fprintf_index(f_output, buffer, lg_buf, binarray, taille_codage);
 				dict_reinit(dico);
             }
+
+            // D <- D U {w.a}
 			dict_insert(dico,concatenation(w, wlength, a), wlength+1);
 			
 			w = malloc(sizeof(uint8_t));
 			wlength = 1;
 			*w = *a;
 		}
-		#ifdef DEBUG
-		printf("\n");
-		#endif
-			//dict_print(dico);
 	}
 
 
@@ -129,16 +103,10 @@ void compression (FILE* f_input, FILE* f_output){
 	// AjoutEOF
 	#ifdef DEBUG
 	printf("Ajout de EOM\n");
-	printf("On ecrit donc EOM d'index %hi\n", EOM);
 	#endif
 	
 	binarray = dec_to_binarray(EOM, taille_codage);
 	fprintf_index(f_output, buffer, lg_buf, binarray, taille_codage);
-
-	#ifdef DEBUG
-	fprintf(stdout, "Contenu restant du buffer : "); fprintf_binarray(stdout, buffer, *lg_buf); printf("\n");
-	#endif
-
 
 	fflush_index(f_output, buffer, *lg_buf);
 
@@ -180,7 +148,7 @@ void decompression (FILE* f_input, FILE* f_output){
 	fread_index(f_input, current_buffer, buffer_length, binarray, binarray_length);
 	i1 = binarray_to_dec(binarray, binarray_length);
 	#ifdef DEBUG
-    fprintf(stdout, "Ca donne : "); fprintf_binarray(stdout, binarray, binarray_length); printf("\n");
+    fprintf(stdout, "On a recupere l'index : "); fprintf_binarray(stdout, binarray, binarray_length); printf("\n");
 	#endif
 
 	// a <- chaine d'index i dans D
@@ -193,24 +161,19 @@ void decompression (FILE* f_input, FILE* f_output){
 
     // ecrire w sur E
 	#ifdef DEBUG
-	printf("On ecrit ");fprintf_n_octets(stdout, w1, *len_w1);
+	printf("On ecrit ");fprintf_n_octets(stdout, w1, *len_w1);printf("\n");
 	#endif
 	fprintf_n_octets(f_output, w1, *len_w1);
 	
-
-	//FIXME : A TERMINER D'ADAPTER AU BINAIRE
 
     // tant que la fin de S n'est pas atteinte
 	while (!feof(f_input) && !EOM_received){
 
         // i2 <- code suivant de S
-        #ifdef DEBUG
-        fprintf(stdout, "\nContenu restant du buffer : "); fprintf_binarray(stdout, current_buffer, *buffer_length); printf("\n");
-		#endif
 		fread_index(f_input, current_buffer, buffer_length, binarray, binarray_length);
 		i2 = binarray_to_dec(binarray, binarray_length);
 		#ifdef DEBUG
-        fprintf(stdout, "Ca donne : "); fprintf_binarray(stdout, binarray, binarray_length); printf("\n");
+        fprintf(stdout, "On a recupere l'index : "); fprintf_binarray(stdout, binarray, binarray_length); printf("\n");
 		#endif
 
 
@@ -220,18 +183,11 @@ void decompression (FILE* f_input, FILE* f_output){
 				break;
 			case AD :
 				binarray_length++;
-				// TODO : implementer AgrandirDictionnaire
-			break;
+				break;
 			case RD:
-				// TODO : implementer ReinitialiserDictionnaire
 				dict_reinit(dico);
-			break;
+				break;
 			default:
-			
-				#ifdef DEBUG
-				printf("i1 = %hi, i2 = %hi\n", i1, i2);
-				#endif
-
 				// Si i1 appartient a D alors
 				if (dict_rechercher_index(dico, i2, chaine_temp, len_chaine_temp) == DICT_NOERROR){
 					// w2 <- chaine d'index i2 dans D
@@ -265,7 +221,7 @@ void decompression (FILE* f_input, FILE* f_output){
 
 	            // D <- D U {w.a}
 		        #ifdef DEBUG
-	            printf("On ajoute ");fprintf_n_octets(stdout, concatenation(w1, *len_w1, a), (*len_w1) + 1);printf("\n");
+	            printf("On ajoute ");fprintf_n_octets(stdout, concatenation(w1, *len_w1, a), (*len_w1) + 1);printf(" au dictionnaire\n");
 	            #endif
 
 
@@ -282,9 +238,8 @@ void decompression (FILE* f_input, FILE* f_output){
 
 		#ifdef DEBUG
 		if (EOM_received){
-			printf("On a lu EOM\n");
+			printf("On a lu EOM, fin de decompression\n");
 		}
 		#endif 
 	}
-	//end(FIXME : A TERMINER D'ADAPTER AU BINAIRE)
 }
