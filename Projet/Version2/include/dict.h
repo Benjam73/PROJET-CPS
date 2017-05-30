@@ -145,7 +145,7 @@ dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* res
  *
  * @param[in]  dico  Le dictionnaire a liberer
  */
-void free_dico(noeud_t dico);
+void free_dico(dict_t dico);
 
 
 #endif // DICT_H

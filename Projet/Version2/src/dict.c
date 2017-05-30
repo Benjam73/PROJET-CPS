@@ -280,10 +280,9 @@ dict_error_t dict_reinit(dict_t dico){
 }
 
 
-void free_dico(noeud_t dico){
-	if(dico){
-		free(dico->frere);
-		free(dico->fils);
-		free(dico);
+void free_dico(dict_t dico){
+	for(int i = 0; i < dico->nb_elt; i++){
+		free(dico->map[i].noeud);
 	}
+	
 }
