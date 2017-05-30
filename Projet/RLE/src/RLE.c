@@ -50,6 +50,7 @@ void elr (FILE* f_input, FILE* f_output){
         if (courant == compare){
             //S'ils sont identiques, on regarde combien de fois il faut les écrire
             fscanf(f_input, "%d", &entier);
+            //fprintf(f_output,"_%d_",entier);
             while(entier+2 > 0){
                 fprintf(f_output,"%c",courant);
                 entier--;
