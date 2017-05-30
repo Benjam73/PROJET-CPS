@@ -81,3 +81,17 @@ dict_index_t to_index(uint8_t* tab, int taille){
 	}
 	return result;
 }
+
+uint8_t* init_vect(){
+	uint8_t* tab = malloc(sizeof(uint8_t));
+	while(adapter_longueur(tab) != 0){
+		tab = malloc(sizeof(uint8_t));
+	}
+	return tab;
+}
+
+void fflush_vect(uint8_t* tab, int taille){
+	for(int i = 0; i < taille; i++){
+		tab[i] = 0x0;
+	}
+}

@@ -1,6 +1,5 @@
 #include "LZW.h"
 
-
 void compression (FILE* f_input, FILE* f_output){
 
 	bool EOM_sent = false ;
@@ -111,6 +110,7 @@ void compression (FILE* f_input, FILE* f_output){
 
 	fflush_index(f_output, buffer, *lg_buf);
 
+
 }
 
 
@@ -166,8 +166,6 @@ void decompression (FILE* f_input, FILE* f_output){
 	fprintf_n_octets(f_output, w1, *len_w1);
 	
 
-	//FIXME : A TERMINER D'ADAPTER AU BINAIRE
-
     // tant que la fin de S n'est pas atteinte
 	while (!feof(f_input) && !EOM_received){
 
@@ -185,12 +183,10 @@ void decompression (FILE* f_input, FILE* f_output){
 				break;
 			case AD :
 				binarray_length++;
-				// TODO : implementer AgrandirDictionnaire
-			break;
+				break;
 			case RD:
-				// TODO : implementer ReinitialiserDictionnaire
 				dict_reinit(dico);
-			break;
+				break;
 			default:
 				// Si i1 appartient a D alors
 				if (dict_rechercher_index(dico, i2, chaine_temp, len_chaine_temp) == DICT_NOERROR){
@@ -246,5 +242,4 @@ void decompression (FILE* f_input, FILE* f_output){
 		}
 		#endif 
 	}
-	//end(FIXME : A TERMINER D'ADAPTER AU BINAIRE)
 }

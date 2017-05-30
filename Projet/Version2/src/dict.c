@@ -269,7 +269,6 @@ dict_t dict_new(){
 }
 
 
-
 dict_error_t dict_reinit(dict_t dico){
 
 	for(int i = 259 ; i < dico->nb_elt ; i++){
@@ -278,4 +277,13 @@ dict_error_t dict_reinit(dict_t dico){
 	dico->nb_elt = 259 ;
 	return DICT_NOERROR;
 
+}
+
+
+void free_dico(noeud_t dico){
+	if(dico){
+		free(dico->frere);
+		free(dico->fils);
+		free(dico);
+	}
 }

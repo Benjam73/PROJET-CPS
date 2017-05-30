@@ -140,6 +140,12 @@ dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict
  */
 dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* resultat, int* taille_resultat);
 
+/**
+ * @brief      Permet de liberer la mémoire allouer pour le dictionnaire
+ *
+ * @param[in]  dico  Le dictionnaire a liberer
+ */
+void free_dico(noeud_t dico);
 
 
 #endif // DICT_H
