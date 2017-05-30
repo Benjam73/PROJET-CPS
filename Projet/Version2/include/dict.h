@@ -3,7 +3,7 @@
  * \brief Gestion du dictionnaire
  * \author BESNIER Benjamin, DE ARAUJO Bastien, MOLION Enzo, VALETTE Léo
  * 
- * Fichier contenant les fonctions de gestion du dictionnaire
+ * Fichier contenant definitions et les fonctions utiles a la gestion du dictionnaire
  * 
  */
 
@@ -51,6 +51,10 @@ typedef enum {
 // TAILLE_MAX = 2^15
 #define TAILLE_MAX 32768
 
+/**
+ * \struct hashmap
+ * \brief Donne un pointeur de noeud et la longueur du mot associe
+ */
 typedef struct {
   noeud_t noeud;
   int taille ;
@@ -58,7 +62,7 @@ typedef struct {
 
 /**
  * \struct _dict
- * \brief Structure caracterisant un dictionnaire, contient le nombre d'element de celui-ci, un pointeur vers _node et un tableau de pointeur de _node
+ * \brief Dictionnaire défini par son nombre d'elements, le noeud racine et une map index -> noeud
  */
 struct _dict{
   dict_index_t nb_elt ;
@@ -68,14 +72,14 @@ struct _dict{
 
 /**
  * \struct _node
- * \brief Structure caracterisant un noeud, chaque noeud possede un symbole, un code et pointeur vers sont noeud pere, un vers sont frere et un vers sont fils
+ * \brief Noeud defini par un symbole, un index, un pointeur vers son noeud pere, un pointeur vers son noeud frere et un pointeur vers son noeud fils
  */
 struct _node {
-  uint8_t sym ;          // Le char suffixe
+  uint8_t sym ; // Le char suffixe
   dict_index_t code ; // Le code associe au symbole
-  struct _node* frere ;   // Le noeud suivant dans la liste de meme niveau
-  struct _node* fils ;    // Le noeud de profondeur superieure
-  struct _node* pere ;    // Le noeud de profondeur inferieure
+  struct _node* frere ; // Le noeud suivant dans la liste de meme niveau
+  struct _node* fils ; // Le noeud de profondeur superieure
+  struct _node* pere ; // Le noeud de profondeur inferieure
 };
 
 #define EOM 256
@@ -83,67 +87,65 @@ struct _node {
 #define RD 258
 
 /**
- * @brief      Fonction affichant le dictionnaire
+ * @brief      Affiche le dictionnaire (pour toute : entree index et symbole)
  *
  * @param[in]  dico  Le dictionnaire a afficher
  */
-void dict_print (dict_t dico);
+void dict_print (const dict_t dico);
+
 
 /**			
  * @brief   Alloue et renvoie un dictionnaire compose des prefixes de taille 1  
  */
 dict_t dict_new();
 
+
 /**
  * @brief      Supprime dans le dictionnaire les entrees autres que des prefixes de taille 1
  *
- * @param[in]  dico  Le dictionnaire a reinitialiser
- */
-
- 
+ * @param[in,out]  dico  Le dictionnaire a reinitialiser
+ */ 
 dict_error_t dict_reinit(dict_t dico);
 
 /**
  * @brief      Ajoute la chaine de caractere mot au dictionnaire dico
  *
- * @param[in]  dico        Le dictionnaire auquel on ajoute un mot
- * @param      mot         Le mot a ajouter
+ * @param[in,out]  dico        Le dictionnaire auquel on ajoute un mot
+ * @param[in]      mot         Le mot a ajouter
  * @param[in]  taille_mot  le taille du mot
  *
  * @return     Le code d'erreur correspondant suivant l'execution de la fonction
  */
 
-dict_error_t dict_insert(dict_t dico, uint8_t* mot, int taille_mot) ;
+dict_error_t dict_insert(dict_t dico, const uint8_t* mot, const int taille_mot) ;
 
 /**
- * @brief      Renvoit dans resultat le codage correspondant a mot
+ * @brief      Renvoie dans resultat le codage correspondant a mot
  *
- * @param[in]  dico        Le dictionnaire ou on recherche le codage
- * @param      mot         Le mot a rechercher correspondant au codage
- * @param[in]  taille_mot  La taille du mot
- * @param      resultat    Le resultat ou l'on stock le codage de mot
- * @param      taille      La taille du codate en nombre de bit
+ * @param[in]   dico        Le dictionnaire ou on recherche le codage
+ * @param[in]   mot         Le mot a rechercher correspondant au codage
+ * @param[in]   taille_mot  La taille du mot
+ * @param[out]  resultat    Le resultat ou l'on stock le codage de mot
+ * @param[out]  taille      La taille du codate en nombre de bits
  *
- * @return     Le code d'erreur correspondant suivant l'execution de la fonction
  */
-dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict_index_t* resultat, int* taille);
+dict_error_t dict_rechercher_mot(const dict_t dico, const uint8_t* mot, const int taille_mot, dict_index_t* resultat, int* taille);
 
 
 /**
- * @brief      Renvoit dans resultat le mot correspondant au codage index
+ * @brief      Renvoie dans resultat le mot correspondant au codage index
  *
  * @param[in]  dico      Le dictionnaire ou on recherche le mot
  * @param[in]  index     Le codage du mot a rechercher
- * @param      resultat  Permet de stocker le mot correspondant a l'index
- *
- * @return     Le code d'erreur correspondant suivant l'execution de la fonction
+ * @param[out]      resultat  L'index trouve
+ * @param[out]  taille_resultat La taille du de l'index trouve (en nombre de bits)
  */
-dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* resultat, int* taille_resultat);
+dict_error_t dict_rechercher_index(const dict_t dico, const dict_index_t index, uint8_t* resultat, int* taille_resultat);
 
 /**
  * @brief      Permet de liberer la mémoire allouer pour le dictionnaire
  *
- * @param[in]  dico  Le dictionnaire a liberer
+ * @param[in,out]  dico  Le dictionnaire a liberer
  */
 void free_dico(dict_t dico);
 

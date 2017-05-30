@@ -1,6 +1,6 @@
 #include "dict.h"
 
-dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict_index_t* resultat, int* taille_index){
+dict_error_t dict_rechercher_mot(const dict_t dico, const uint8_t* mot, const int taille_mot, dict_index_t* resultat, int* taille_index){
 
 	noeud_t noeud_courant = dico->racine;
 	int i = 0;
@@ -44,7 +44,7 @@ dict_error_t dict_rechercher_mot(dict_t dico, uint8_t* mot, int taille_mot, dict
 }
 
 
-dict_error_t dict_rechercher_index(dict_t dico, dict_index_t index, uint8_t* resultat, int* taille_resultat){
+dict_error_t dict_rechercher_index(const dict_t dico, const dict_index_t index, uint8_t* resultat, int* taille_resultat){
 	int i = 0;
 	int j = 1;
 
@@ -142,7 +142,7 @@ dict_error_t ajouter_dans_ligne(dict_t dico, noeud_t pere, noeud_t frere, uint8_
 }
 
 
-dict_error_t dict_insert(dict_t dico, uint8_t* mot, int taille_mot){
+dict_error_t dict_insert(dict_t dico, const uint8_t* mot, const int taille_mot){
 
 	dict_index_t index ;
 
@@ -176,17 +176,15 @@ dict_error_t dict_insert(dict_t dico, uint8_t* mot, int taille_mot){
 }
 
 
-void dict_print (dict_t dico){
+void dict_print (const dict_t dico){
 
 	uint8_t* mot_courant = malloc(sizeof(uint8_t)) ;
-        // printf("Mot courant : %s\n", i, mot_courant);
 
 	int * taille_mot = malloc(sizeof(int));
 
 	for (int i = 0; i < dico->nb_elt; i++){
 		dict_rechercher_index(dico, i, mot_courant, taille_mot);
 		printf("Code : %d \t Mot courant : %s\n", i, mot_courant);
-		// printf("Code : %d \t Mot courant : %c\n", i, mot_courant[1]);
 	}
 
 }
@@ -208,7 +206,9 @@ void ajout_premier(dict_t dico){
 
 void ajout_speciaux(dict_t dico){
 
-	noeud_t courant = malloc(sizeof(struct _node)) ;
+	noeud_t courant ;
+
+	courant = malloc(sizeof(struct _node)) ;
 
 	//EndOfMessage = 256
 	dico->nb_elt = dico->nb_elt + 1;
@@ -220,7 +220,9 @@ void ajout_speciaux(dict_t dico){
 	dico->map[EOM].noeud = courant;
 	dico->map[EOM].taille = 1;
 
+
 	//AgrandirDictionnaire = 257
+	courant = malloc(sizeof(struct _node)) ;
 	dico->nb_elt = dico->nb_elt + 1;
 	courant->sym = '+';
 	courant->code = dico->nb_elt-1 ;
@@ -231,6 +233,7 @@ void ajout_speciaux(dict_t dico){
 	dico->map[EOM].taille = 1;
 
 	//ReinitialiserDictionnaire = 258
+	courant = malloc(sizeof(struct _node)) ;
 	dico->nb_elt = dico->nb_elt + 1;
 	courant->sym = ':';
 	courant->code = dico->nb_elt-1 ;
@@ -250,9 +253,6 @@ dict_t dict_new(){
 
 	uint8_t*  mot_courant = malloc(sizeof(uint8_t));
 
-	mot_courant[1] = '\0' ;
-
-
 	ajout_premier(dico);
 
 
@@ -261,9 +261,6 @@ dict_t dict_new(){
 		dict_insert(dico, mot_courant, 1);
 	}
 
-
-	// TODO : ajout cas speciaux
-	// EndOfMessage, ResetDictionnaire, AgrandirDictionnaire
 	ajout_speciaux(dico);
 	return dico ;
 }
@@ -284,5 +281,5 @@ void free_dico(dict_t dico){
 	for(int i = 0; i < dico->nb_elt; i++){
 		free(dico->map[i].noeud);
 	}
-	
+	dico->nb_elt = 0;
 }

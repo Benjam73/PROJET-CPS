@@ -19,18 +19,18 @@
 #include "IO.h"
 
 /**
- * @brief      Fonction compressant le fichier f_input et ecrivant le resultat de f_output
+ * @brief      Place la compression du contenu de f_input dans f_output
  *
  * @param      f_input   Le fichier a compresser
- * @param      f_output  Le fichier contenant le fichier compresser
+ * @param      f_output  Le fichier contenant le fichier compresse
  */
 void compression (FILE* f_input, FILE* f_output);
 
 /**
- * @brief      Fonction decompressant le fichier f_input et ecrivant le resultat de f_output
+ * @brief      Place la decompression du contenu de f_input dans f_output
  *
  * @param      f_input   Le fichier a decompresser
- * @param      f_output  Le fichier contenant le fichier decompresser
+ * @param      f_output  Le fichier contenant le contenu decompresse
  */
 void decompression (FILE* f_input, FILE* f_output);
 

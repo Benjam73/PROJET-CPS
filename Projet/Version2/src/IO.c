@@ -88,8 +88,6 @@ void test_IO(){
 
   fclose(f);
 
-
-
 }
 
 
@@ -128,32 +126,7 @@ uint8_t* dec_to_binarray(const dict_index_t n, const int array_length){
 // Resultat systematiquement de taille 8
 uint8_t* byte_to_binarray(const uint8_t* byte){
 
-  // int offset, bit, count;
-
-  // count = 0;
   uint8_t* array = malloc(8 * sizeof(uint8_t));
-
-
-  // if ( array == NULL ){
-  //   exit(EXIT_FAILURE);
-  // }
-
-  // for (offset = 7 ; offset >= 0 ; offset--){
-
-  //   bit = 8 >> offset;
-
-  //   if (bit & 1){
-  //     *(array+count) = 1 ;
-  //   }
-  //   else{
-  //     *(array+count) = 0 ;
-  //   }
-
-  //   count++;
-  // }
-  // #ifdef DEBUG
-  // printf("On renvoit ");fprintf_binarray(stdout,array, 8);printf("\n");
-  // #endif
 
   for (int i = 0; i < 8; i++){
     array[7 - i] = (*byte & (1 << i)) >> i;
@@ -177,9 +150,7 @@ dict_index_t binarray_to_dec(const uint8_t* array, const int array_length){
   for(int i = 0 ; i < array_length ; i++){
     res = (res << 1) + array[i] ;
   }
-
   return res ;
-
 }
 
 // Parametre systematiquement de taille 8
@@ -214,9 +185,6 @@ void fprintf_index (FILE* f, uint8_t* current_buffer, int* buffer_length, const 
   // On complete le buffer a ecrire avec l'index
   for (int i = 0 ; i < to_write_from_index ; i++){
     // On ecrit index[0 .. 8 - buffer_length] dans writing_buffer[buffer_length .. 8]
-    // #ifdef DEBUG
-    // fprintf(stdout, "writing_buffer[%d] <- index[%d] = %u\n", *buffer_length + i, i, index[i]);
-    // #endif
     writing_buffer[*buffer_length + i] = index[i] ;
   }
 
@@ -226,9 +194,7 @@ void fprintf_index (FILE* f, uint8_t* current_buffer, int* buffer_length, const 
   #endif
   writing_byte = binarray_to_byte(writing_buffer);
   if (fwrite(writing_byte, 1, 1, f) < 1){
-    #ifdef DEBUG
     fprintf(stdout, "Erreur d'ecriture\n");
-    #endif
     exit(EXIT_FAILURE);
   }
 
