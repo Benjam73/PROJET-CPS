@@ -32,10 +32,13 @@ void rle (FILE* f_input, FILE* f_output){
             cpt = 1;
         }
     }
+     if (compare == '\n'){
+        fprintf(f_output, "\n");
+    }
 }
 
 void elr (FILE* f_input, FILE* f_output){
-    int entier = 0;
+    char entier ;
     char courant ;
     char compare ;
     
@@ -49,9 +52,9 @@ void elr (FILE* f_input, FILE* f_output){
         //On compare les deux derniers caractères récupérés
         if (courant == compare){
             //S'ils sont identiques, on regarde combien de fois il faut les écrire
-            fscanf(f_input, "%d", &entier);
+            fscanf(f_input, "%c", &entier);
             //fprintf(f_output,"_%d_",entier);
-            while(entier+2 > 0){
+            while((entier-'0')+2 > 0){
                 fprintf(f_output,"%c",courant);
                 entier--;
             }
@@ -64,7 +67,9 @@ void elr (FILE* f_input, FILE* f_output){
             courant = compare;
             fscanf(f_input, "%c", &compare) ;
         }
-
+    }
+    if (compare == '\n'){
+        fprintf(f_output, "\n");
     }
 }
 
