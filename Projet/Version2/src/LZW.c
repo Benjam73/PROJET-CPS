@@ -2,15 +2,6 @@
 
 
 
-uint8_t* init_vect(){
-	uint8_t* tab = malloc(sizeof(uint8_t));
-	while(adapter_longueur(tab) != 0){
-		tab = malloc(sizeof(uint8_t));
-	}
-	return tab;
-}
-
-
 
 
 void compression (FILE* f_input, FILE* f_output){
@@ -150,6 +141,7 @@ void compression (FILE* f_input, FILE* f_output){
 
 
 	fflush_index(f_output, buffer, *lg_buf);
+
 
 }
 
