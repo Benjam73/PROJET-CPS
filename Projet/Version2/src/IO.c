@@ -222,7 +222,7 @@ void fprintf_index (FILE* f, uint8_t* current_buffer, int* buffer_length, const 
 
   // On ecrit ce premier buffer
   #ifdef DEBUG
-  fprintf(stdout, "On va ecrire :\t"); fprintf_binarray(stdout, writing_buffer, 8); fprintf(stdout, "\n");
+  fprintf(stdout, "On ecrit l'octet : "); fprintf_binarray(stdout, writing_buffer, 8); fprintf(stdout, "\n");
   #endif
   writing_byte = binarray_to_byte(writing_buffer);
   if (fwrite(writing_byte, 1, 1, f) < 1){
@@ -277,7 +277,7 @@ void fflush_index (FILE* f, uint8_t* current_buffer, const int buffer_length){
 
   if (buffer_length != 0){
     #ifdef DEBUG
-    fprintf(stdout, "On va ajouter %i bit(s) de padding\n", 8 - buffer_length);
+    fprintf(stdout, "On ajoute %i bit(s) de padding\n", 8 - buffer_length);
     #endif
     
     // On place les 0s de padding a la fin du buffer
@@ -287,7 +287,7 @@ void fflush_index (FILE* f, uint8_t* current_buffer, const int buffer_length){
 
     // On ecrit ce buffer
     #ifdef DEBUG
-    fprintf(stdout, "FF : On va ecrire :\t"); fprintf_binarray(stdout, current_buffer, 8); fprintf(stdout, "\n");
+    fprintf(stdout, "On ecrit l'octet : "); fprintf_binarray(stdout, current_buffer, 8); fprintf(stdout, "\n");
     #endif
     writing_byte = binarray_to_byte(current_buffer);
     if (fwrite(writing_byte, 1, 1, f) < 1){
@@ -338,7 +338,7 @@ void fread_index(FILE* f, uint8_t* current_buffer, int* buffer_length, uint8_t* 
     reading_buffer = byte_to_binarray(reading_byte);
 
     #ifdef DEBUG
-    printf("On a lu ");fprintf_binarray(stdout, reading_buffer, 8);printf("\n");
+    printf("On lit : ");fprintf_binarray(stdout, reading_buffer, 8);printf("\n");
     #endif
 
     // On recopie cet octet dans index
