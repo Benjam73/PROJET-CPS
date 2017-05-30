@@ -40,25 +40,29 @@ void elr (FILE* f_input, FILE* f_output){
     char compare ;
     
     fscanf(f_input, "%c", &courant) ;
+    fscanf(f_input,"%c", &compare);
 
 
     while (!feof(f_input)) {
 
         // Consomme et met dans une variable l'entier, le caractere et consomme juste le point.
-        fscanf(f_input,"%c", &compare);
-        
+
+
         // Si le caractere est un point c'est qu'il a une entree : .123. Ici on doit alors afficher 12 fois le chiffre 3.
         if (courant == compare){
             fscanf(f_input, "%d", &entier);
-            fprintf(f_output,"%c",compare);
-            fprintf(f_output,"%c",compare);
-            while(entier > 0){
-                fprintf(f_output,"%c",compare);
+            // fprintf(f_output,"%c",compare);
+            // fprintf(f_output,"%c",compare);
+            while(entier+2 > 0){
+                fprintf(f_output,"%c",courant);
                 entier--;
             }
+            fscanf(f_input, "%c", &courant) ;
+            fscanf(f_input,"%c", &compare);
         }else{ 
             fprintf(f_output,"%c",courant);
-            fscanf(f_input, "%c", &courant) ;
+            courant = compare;
+            fscanf(f_input, "%c", &compare) ;
         }
 
     }
