@@ -35,31 +35,30 @@ void rle (FILE* f_input, FILE* f_output){
 }
 
 void elr (FILE* f_input, FILE* f_output){
-    int entier = 0;//, unite = 0, new_cpt = 0;
+    int entier = 0;
     char courant ;
     char compare ;
     
+
+    //On lit les deux premiers caractères du fichier
     fscanf(f_input, "%c", &courant) ;
     fscanf(f_input,"%c", &compare);
 
 
     while (!feof(f_input)) {
-
-        // Consomme et met dans une variable l'entier, le caractere et consomme juste le point.
-
-
-        // Si le caractere est un point c'est qu'il a une entree : .123. Ici on doit alors afficher 12 fois le chiffre 3.
+        //On compare les deux derniers caractères récupérés
         if (courant == compare){
+            //S'ils sont identiques, on regarde combien de fois il faut les écrire
             fscanf(f_input, "%d", &entier);
-            // fprintf(f_output,"%c",compare);
-            // fprintf(f_output,"%c",compare);
             while(entier+2 > 0){
                 fprintf(f_output,"%c",courant);
                 entier--;
             }
+            //On récupère les deux caractères suivants
             fscanf(f_input, "%c", &courant) ;
             fscanf(f_input,"%c", &compare);
         }else{ 
+            //Sinon on écrit un seul caractère et on recommence avec le suivant
             fprintf(f_output,"%c",courant);
             courant = compare;
             fscanf(f_input, "%c", &compare) ;
